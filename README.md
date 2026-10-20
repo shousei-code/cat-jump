@@ -18,3 +18,12 @@ GitHub の Settings → Pages → Deploy from a branch → main / (root) → Sav
 ベストスコアはブラウザーの localStorage にのみ保存。端末間同期はありません。
 
 猫の画像はこのゲーム用に AI 生成。外部 CDN・認証・バックエンドは使いません。
+
+## 3D: こもれびドールハウス
+
+`dollhouse/` を開くと遊べる3Dのお部屋です。Three.js 0.180.0 を同梱（MIT、vendor/THREE-LICENSE.txt）。外部CDNは不要。
+- 床をタップ、または矢印キーで女の子を移動。
+- 模様替えで家具を選び、床をタップまたはドラッグして配置。回転・削除・追加に対応。
+- 服・髪・壁紙の色変更、自動保存、視点変更、ズーム。
+- 保存はブラウザーの localStorage。端末間同期・町・お店・本格的な衝突判定は未実装の試作版。
+- WebGL対応ブラウザーが必要。実機のSafari/iPadでは未検証。
