@@ -1,0 +1,8 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {initialLife,buy,eat,gift,feed,earn} from '../dollhouse/life-state.js';
+test('work, buy, eat and persist an earned reward',()=>{const s=initialLife();assert.equal(s.coins,100);earn(s,'bakery');assert.equal(s.coins,145);assert.equal(buy(s,'meal'),null);assert.equal(s.coins,120);assert.equal(s.inventory.meal,1);s.energy=50;assert(eat(s,'meal'));assert.equal(s.energy,85);assert.equal(s.inventory.meal,0);assert(!eat(s,'meal'));assert.deepEqual(initialLife(JSON.parse(JSON.stringify(s))),s);});
+test('insufficient funds and unknown products cannot mutate balance',()=>{const s=initialLife({coins:0});assert(buy(s,'cake'));assert(buy(s,'missing'));assert.equal(s.inventory.cake,0);assert.equal(s.coins,0);assert(!earn(s,'home'));});
+test('gifts consume an item once; friendship capped',()=>{const s=initialLife();buy(s,'bread');assert(gift(s,'momo','bread'));assert.equal(s.friends.momo,1);assert(!gift(s,'momo','bread'));s.friends.momo=5;buy(s,'bread');assert(!gift(s,'momo','bread'));assert.equal(s.inventory.bread,1);});
+test('feeding requires an adopted pet and food',()=>{const s=initialLife();buy(s,'petfood');assert(!feed(s));s.pet='cat';assert(feed(s));assert.equal(s.petLove,1);assert(!feed(s));});
+test('malformed saves are bounded and unknown pets rejected',()=>{const s=initialLife({coins:-90,energy:Infinity,inventory:{bread:-2,cake:999999},friends:{momo:900},pet:'dragon',petLove:-2});assert.equal(s.coins,0);assert.equal(s.energy,80);assert.equal(s.inventory.bread,0);assert.equal(s.inventory.cake,999);assert.equal(s.friends.momo,5);assert.equal(s.pet,null);});
