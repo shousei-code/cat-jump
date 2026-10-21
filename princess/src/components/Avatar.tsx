@@ -150,7 +150,15 @@ export function Avatar({
       512 * hair.scale,
       512 * hair.scale,
     ),
-    filter: hairFilters[state.hairColor] || "none",
+    filter:
+      [
+        hairFilters[state.hairColor] === "none"
+          ? ""
+          : hairFilters[state.hairColor],
+        getItem(eq.hair).tint,
+      ]
+        .filter(Boolean)
+        .join(" ") || "none",
   };
   const faceStyle = place(
     214.4,
@@ -255,14 +263,20 @@ export function Avatar({
                 sheet="accessories"
                 frame={5}
                 className="doll-accessory earring-left"
-                style={place(208, 98, 40, 40)}
+                style={{
+                  ...place(208, 98, 40, 40),
+                  filter: getItem(eq.accessory).tint,
+                }}
                 eager={animate}
               />
               <RasterSprite
                 sheet="accessories"
                 frame={5}
                 className="doll-accessory earring-right"
-                style={place(263, 98, 40, 40)}
+                style={{
+                  ...place(263, 98, 40, 40),
+                  filter: getItem(eq.accessory).tint,
+                }}
                 eager={animate}
               />
             </>
@@ -271,7 +285,10 @@ export function Avatar({
               sheet="accessories"
               frame={getItem(eq.accessory).shape}
               className="doll-accessory"
-              style={place(acc.x, acc.y, acc.w, acc.h)}
+              style={{
+                ...place(acc.x, acc.y, acc.w, acc.h),
+                filter: getItem(eq.accessory).tint,
+              }}
               eager={animate}
             />
           )}

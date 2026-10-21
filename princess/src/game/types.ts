@@ -1,3 +1,4 @@
+import type { CampaignState } from "../campaign/engine";
 export type Tag = "cute" | "elegant" | "cool" | "nature";
 export type Slot = "hair" | "outfit" | "shoes" | "accessory";
 export type Palette = "rose" | "lavender" | "mint" | "navy" | "gold" | "ivory";
@@ -17,6 +18,7 @@ export interface Item {
   rarity: "basic" | "rare" | "secret";
   unlock?: "chapter" | "mystery";
   description: string;
+  tint?: string;
 }
 export type Node =
   | "letter"
@@ -37,6 +39,7 @@ export interface BattleResult {
   rewarded: boolean;
 }
 export interface GameState {
+  campaign?: CampaignState;
   version: 1;
   started: boolean;
   node: Node;

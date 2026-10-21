@@ -37,14 +37,19 @@ export function Story({
           プリンセスドレス ＆ 王冠をコレクションに追加
         </p>
         <div className="button-row">
-          <button className="primary" onClick={() => go("closet")}>
-            ごほうびを着てみる
+          <button
+            className="primary"
+            onClick={() => dispatch({ type: "CAMPAIGN_START" })}
+          >
+            物語の第2章へ
           </button>
+          <button onClick={() => go("closet")}>ごほうびを着てみる</button>
           <button onClick={() => go("map")}>温室の秘密を探す</button>
           <button onClick={() => go("battle")}>次のテーマで腕だめし</button>
         </div>
         <p className="fine">
-          第1章の物語はここまで。アルバムから別の選択で再プレイできます。
+          第1章クリア！
+          第2章からは、文化祭・冬休み・バレンタインを経て、12章の結末へ進みます。
         </p>
       </section>
     );

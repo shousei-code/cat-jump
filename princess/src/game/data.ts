@@ -226,6 +226,52 @@ export const ITEMS: Item[] = [
     "chapter",
   ),
 ];
+// 30 original designs plus 72 explicitly labeled color editions (102 collectibles).
+const editions: { name: string; palette: Palette; filter: string }[] = [
+  {
+    name: "桜色",
+    palette: "rose",
+    filter: "hue-rotate(315deg) saturate(1.15)",
+  },
+  {
+    name: "月紫",
+    palette: "lavender",
+    filter: "hue-rotate(260deg) saturate(.8)",
+  },
+  { name: "新緑", palette: "mint", filter: "hue-rotate(100deg) saturate(.8)" },
+  {
+    name: "星金",
+    palette: "gold",
+    filter: "hue-rotate(25deg) brightness(1.1)",
+  },
+  {
+    name: "夜空",
+    palette: "navy",
+    filter: "hue-rotate(200deg) brightness(.8)",
+  },
+  { name: "雪白", palette: "ivory", filter: "saturate(.15) brightness(1.25)" },
+];
+for (const base of [...ITEMS].filter(
+  (i) => i.slot === "hair" || i.slot === "accessory",
+)) {
+  for (const [n, edition] of editions
+    .slice(0, base.slot === "hair" ? 4 : 6)
+    .entries()) {
+    ITEMS.push({
+      ...base,
+      id: base.id + "-edition-" + n,
+      name: edition.name + "・" + base.name,
+      palette: edition.palette,
+      price: 40,
+      unlock: undefined,
+      rarity: "rare",
+      tint: edition.filter,
+      description:
+        edition.name +
+        "の色違いコレクション。原画の形を保ち、髪または装飾だけを染めた限定カラー。",
+    });
+  }
+}
 export const INITIAL_OWNED = ITEMS.filter((i) => !i.price && !i.unlock).map(
   (i) => i.id,
 );

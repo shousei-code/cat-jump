@@ -1,3 +1,4 @@
+import { Campaign } from "./campaign/Campaign";
 import { useEffect, useState } from "react";
 import { useGame, downloadText } from "./useGame";
 import { levelFor, parseSave } from "./game/engine";
@@ -141,8 +142,8 @@ export default function App() {
         最初からやり直す
       </button>
       <p className="fine">
-        MVP v0.1 ·
-        第1章／30衣装／3難易度／温室の謎。追加の章は今後の開発対象です。
+        全12章 · 102アイテム（色違いを含む） · 6エンディング ·
+        5種類の挑戦。シークレットは結末を見たあとに解放。
       </p>
     </section>
   );
@@ -174,7 +175,7 @@ export default function App() {
             <h1>
               キラキラ学園<span>♡ 運命のプリンセス ♡</span>
             </h1>
-            <div className="gold-line">✦ ─── CHAPTER 01 ─── ✦</div>
+            <div className="gold-line">✦ ─── YOUR OWN STORY ─── ✦</div>
             <p>
               一通の招待状からはじまる、
               <br />
@@ -217,7 +218,7 @@ export default function App() {
             </span>
           </div>
           <div className="title-footer">
-            KIRAKIRA ACADEMY <span>第1章 プレイ可能版 · 音声は初期OFF</span>
+            KIRAKIRA ACADEMY <span>全12章 · 音声は初期OFF</span>
           </div>
         </main>
       ) : (
@@ -242,9 +243,11 @@ export default function App() {
               ))}
             </nav>
             <div className="sidebar-bottom">
-              ✧ 第1章
+              ✧ 第{state.campaign?.chapter ?? 1}章
               <br />
-              <small>はじまりの招待状</small>
+              <small>
+                {state.campaign ? "約束の庭へ続く物語" : "はじまりの招待状"}
+              </small>
             </div>
           </aside>
           <div className="app-content">
@@ -287,13 +290,17 @@ export default function App() {
                   />
                 </>
               ) : screen === "story" ? (
-                <Story state={state} dispatch={dispatch} go={go} />
+                state.campaign ? (
+                  <Campaign state={state} dispatch={dispatch} go={go} />
+                ) : (
+                  <Story state={state} dispatch={dispatch} go={go} />
+                )
               ) : screen === "closet" ? (
                 <Closet
                   state={state}
                   dispatch={dispatch}
                   toast={toast}
-                  onBattle={() => go("battle")}
+                  onBattle={() => go(state.campaign ? "story" : "battle")}
                 />
               ) : screen === "battle" ? (
                 <Battle
@@ -305,7 +312,12 @@ export default function App() {
               ) : screen === "map" ? (
                 <Academy state={state} dispatch={dispatch} toast={toast} />
               ) : screen === "album" ? (
-                <Album state={state} onReplay={() => setConfirm("replay")} />
+                <Album
+                  state={state}
+                  onReplay={() =>
+                    state.campaign ? go("story") : setConfirm("replay")
+                  }
+                />
               ) : (
                 settings
               )}

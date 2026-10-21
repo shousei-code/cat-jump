@@ -134,6 +134,13 @@ export function Album({
     "chapter-1": "はじまりのプリンセス",
     "expert-win": "工夫の達人",
     mystery: "温室の秘密",
+    "trial-fashion": "おしゃれの魔法",
+    "trial-rhythm": "きらめくリズム",
+    "trial-memory": "思い出の達人",
+    "trial-puzzle": "学園の名探偵",
+    "trial-mission": "笑顔を届ける係",
+    "story-complete": "未来への約束",
+    "true-ending": "運命は、みんなでつくる",
   };
   return (
     <>
@@ -169,7 +176,9 @@ export function Album({
         ))}
       </div>
       <section className="panel">
-        <h2>✧ 実績 {state.achievements.length} / 5</h2>
+        <h2>
+          ✧ 実績 {state.achievements.length} / {Object.keys(names).length}
+        </h2>
         <div className="achievement-list">
           {Object.entries(names).map(([id, name]) => (
             <span
@@ -195,9 +204,15 @@ export function Album({
         )}
         {state.chapterClear && (
           <>
-            <button onClick={onReplay}>別の選択で第1章をもう一度</button>
+            <button onClick={onReplay}>
+              {state.campaign
+                ? "続きの物語へ戻る"
+                : "別の選択で第1章をもう一度"}
+            </button>
             <p className="fine">
-              衣装・コイン・実績は引き継ぎます。関係と性格はリセット。初回報酬は再取得できません。
+              {state.campaign
+                ? "物語の進行はそのまま。続きの章やエンディング図鑑に戻れます。"
+                : "衣装・コイン・実績は引き継ぎます。関係と性格はリセット。初回報酬は再取得できません。"}
             </p>
           </>
         )}

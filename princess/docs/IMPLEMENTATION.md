@@ -1,5 +1,7 @@
 # 実装計画
 
+> この文書は初期MVP時点の設計・記録です。全12章版の現在の機能は [README](../README.md)、追加実装は [COMPLETION-REPORT](COMPLETION-REPORT.md) を参照してください。
+
 1. 既存リポジトリ確認と専用ブランチ（公開ゲーム保持）。
 2. princess/ にReact・TypeScript・Vite・Tailwindを構築。
 3. 状態・衣装・会話・採点・セーブ検証を純粋なゲームロジックとして実装。

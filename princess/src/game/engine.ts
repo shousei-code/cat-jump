@@ -1,4 +1,10 @@
 import {
+  campaignReduce,
+  validateCampaign,
+  type CampaignAction,
+} from "../campaign/engine";
+import { CHAPTERS } from "../campaign/data";
+import {
   CLUES,
   INITIAL_OUTFIT,
   INITIAL_OWNED,
@@ -147,6 +153,7 @@ function log(s: GameState, line: string) {
   s.history = [...s.history, line].slice(-35);
 }
 export type Action =
+  | CampaignAction
   | { type: "START" }
   | {
       type: "APPEARANCE";
@@ -164,6 +171,16 @@ export type Action =
   | { type: "SOLVE"; symbols: string[] }
   | { type: "REPLAY" };
 export function reduce(state: GameState, action: Action): GameState {
+  if (action.type.startsWith("CAMPAIGN_")) {
+    const theme = CHAPTERS.find(
+      (c) => c.number === (state.campaign?.chapter ?? 2),
+    )!.theme;
+    return campaignReduce(
+      state,
+      action as CampaignAction,
+      scoreOutfit(state.equipped, theme).total,
+    );
+  }
   const s: GameState = structuredClone(state);
   switch (action.type) {
     case "START":
@@ -290,7 +307,7 @@ export function reduce(state: GameState, action: Action): GameState {
       }
       break;
     case "REPLAY":
-      if (!s.chapterClear) return state;
+      if (!s.chapterClear || s.campaign) return state;
       s.node = "letter";
       s.chapterClear = false;
       s.themeIndex = 0;
@@ -370,8 +387,8 @@ export function parseSave(raw: string): GameState {
     ) ||
     !strings(s.clues, 2) ||
     !s.clues.every((id) => CLUES.some((c) => c.id === id)) ||
-    !strings(s.claimed, 30) ||
-    !strings(s.achievements, 20) ||
+    !strings(s.claimed, 100) ||
+    !strings(s.achievements, 50) ||
     !Array.isArray(s.history) ||
     s.history.length > 35 ||
     !s.history.every((x) => typeof x === "string" && x.length < 1000) ||
@@ -401,6 +418,11 @@ export function parseSave(raw: string): GameState {
     )
       throw Error("対戦の採点が一致しません。");
   }
+  if (
+    s.campaign !== undefined &&
+    (!s.chapterClear || !validateCampaign(s.campaign))
+  )
+    throw Error("続きの物語のデータが正しくありません。");
   return s;
 }
 export type LoadedSave =

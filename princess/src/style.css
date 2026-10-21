@@ -2107,3 +2107,195 @@ select {
 [data-person="kaito"][data-pose="2"] .portrait-pose {
   clip-path: inset(5.5% 0 0 0);
 }
+/* Complete story and touch-friendly challenge screens. */
+.campaign-tabs {
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.campaign .panel {
+  margin: 22px 0;
+}
+.campaign .button-row {
+  flex-wrap: wrap;
+}
+.campaign [aria-pressed="true"] {
+  background: #ead9ee;
+  border-color: #a775a8;
+}
+.campaign select {
+  padding: 12px;
+  background: white;
+  border: 1px solid #dac7e0;
+  border-radius: 12px;
+  max-width: 100%;
+}
+.campaign-reply {
+  max-width: 760px;
+  margin-inline: auto !important;
+  text-align: center;
+}
+.campaign-reply-portrait {
+  height: 260px;
+  width: 260px;
+  margin: auto;
+}
+.campaign-reply-portrait .portrait {
+  width: 100%;
+  height: 100%;
+}
+.campaign-reply-portrait .raster-avatar {
+  height: 100%;
+}
+.campaign-ending {
+  text-align: center;
+}
+.campaign-ending > p {
+  max-width: 700px;
+  margin: 24px auto;
+  line-height: 2.2;
+}
+.ending-character {
+  height: 340px;
+}
+.campaign-ending .button-row {
+  justify-content: center;
+}
+.chapter-progress summary,
+.campaign summary {
+  cursor: pointer;
+  padding: 14px 0;
+  min-height: 44px;
+}
+.chapter-progress li {
+  margin: 10px 0;
+}
+.route-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+.route-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-height: 170px;
+}
+.route-card .portrait {
+  height: 100px;
+  width: 100px;
+}
+.challenge-panel {
+  max-width: 850px;
+}
+.challenge-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.challenge-tiles button {
+  min-height: 85px;
+  font-size: 30px;
+  touch-action: manipulation;
+}
+.challenge-tiles small {
+  display: block;
+  font-size: 12px;
+}
+.challenge-tiles .lit {
+  background: #ffe1a2;
+  color: #633776;
+  box-shadow: 0 0 25px #e3b251;
+  transform: scale(1.04);
+  opacity: 1;
+}
+.rhythm-track {
+  height: 290px;
+  position: relative;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    90deg,
+    #eee3f2 0%,
+    #eee3f2 24.5%,
+    #d2bedb 24.5%,
+    #d2bedb 25%
+  );
+  border-radius: 20px;
+  margin: 20px 0;
+}
+.rhythm-line {
+  position: absolute;
+  top: 250px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #b38a37;
+}
+.rhythm-note {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 25px;
+}
+.mission-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 500px;
+}
+.mission-grid button {
+  min-height: 85px;
+  font-size: 32px;
+  touch-action: manipulation;
+}
+.puzzle-clue {
+  padding: 20px;
+  border-radius: 18px;
+  background: #f2e8f6;
+  line-height: 2;
+}
+.campaign .choices small {
+  margin-left: 12px;
+}
+@media (max-width: 700px) {
+  .campaign .story-stage {
+    height: 560px;
+  }
+  .campaign .dialogue {
+    max-height: 265px;
+    overflow: auto;
+  }
+  .campaign-tabs button {
+    flex: 1;
+    font-size: 12px;
+    padding: 10px;
+  }
+  .challenge-panel {
+    padding: 20px 14px;
+  }
+  .challenge-tiles {
+    gap: 6px;
+  }
+  .challenge-tiles button {
+    min-height: 76px;
+  }
+  .route-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .campaign-reply-portrait {
+    width: 220px;
+    height: 220px;
+  }
+  .campaign .choices button {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .campaign .choices small {
+    margin-left: 0;
+  }
+}

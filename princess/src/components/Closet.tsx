@@ -1,3 +1,4 @@
+import { CHAPTERS } from "../campaign/data";
 import { useState } from "react";
 import {
   ITEMS,
@@ -31,7 +32,13 @@ export function Closet({
     [filter, setFilter] = useState<"owned" | "all">("owned");
   const item = getItem(selected),
     owned = state.owned.includes(item.id),
-    theme = THEMES[state.themeIndex],
+    theme = state.campaign
+      ? THEMES.find(
+          (t) =>
+            t.id ===
+            CHAPTERS.find((c) => c.number === state.campaign!.chapter)!.theme,
+        )!
+      : THEMES[state.themeIndex],
     score = scoreOutfit(state.equipped, theme.id);
   const list = ITEMS.filter(
     (i) => i.slot === slot && (filter === "all" || state.owned.includes(i.id)),
