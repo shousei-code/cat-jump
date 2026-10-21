@@ -67,8 +67,7 @@ async function fallbackTexture(sheet: Sheet, tone: string): Promise<string> {
     canvas.toBlob(
       (value) =>
         value ? resolve(value) : reject(new Error("Encoding failed")),
-      "image/webp",
-      0.92,
+      "image/png",
     ),
   );
   return URL.createObjectURL(blob);

@@ -34,7 +34,9 @@ export type Sheet =
   | "wardrobe-c"
   | "accessories"
   | "haruto-ren"
-  | "aoi-kaito";
+  | "aoi-kaito"
+  | "haruto-ren-blink"
+  | "aoi-kaito-blink";
 export const SHEETS: Record<Sheet, { cols: number; rows: number }> = {
   "koto-expressions": { cols: 4, rows: 3 },
   "koto-hair": { cols: 3, rows: 2 },
@@ -44,6 +46,8 @@ export const SHEETS: Record<Sheet, { cols: number; rows: number }> = {
   accessories: { cols: 4, rows: 2 },
   "haruto-ren": { cols: 2, rows: 3 },
   "aoi-kaito": { cols: 2, rows: 3 },
+  "haruto-ren-blink": { cols: 2, rows: 3 },
+  "aoi-kaito-blink": { cols: 2, rows: 3 },
 };
 export const artUrl = (sheet: string) =>
   import.meta.env.BASE_URL + "art/characters/" + sheet + ".webp";
@@ -153,9 +157,12 @@ export const ACCESSORIES = [
   { x: 199, y: 17, w: 117, h: 87 },
   { x: 213, y: 0, w: 87, h: 60 },
 ];
-export const BOYS: Record<string, { sheet: Sheet; column: number }> = {
-  haruto: { sheet: "haruto-ren", column: 0 },
-  ren: { sheet: "haruto-ren", column: 1 },
-  aoi: { sheet: "aoi-kaito", column: 0 },
-  kaito: { sheet: "aoi-kaito", column: 1 },
+export const BOYS: Record<
+  string,
+  { sheet: Sheet; blinkSheet: Sheet; column: number }
+> = {
+  haruto: { sheet: "haruto-ren", blinkSheet: "haruto-ren-blink", column: 0 },
+  ren: { sheet: "haruto-ren", blinkSheet: "haruto-ren-blink", column: 1 },
+  aoi: { sheet: "aoi-kaito", blinkSheet: "aoi-kaito-blink", column: 0 },
+  kaito: { sheet: "aoi-kaito", blinkSheet: "aoi-kaito-blink", column: 1 },
 };

@@ -68,6 +68,8 @@ test("第1章を攻略・再開・探索、初期衣装でエキスパート勝�
   await page.screenshot({
     path: info.outputPath("closet.png"),
     fullPage: true,
+    animations: "disabled",
+    scale: "css",
   });
   expect(
     await page.evaluate(
@@ -184,6 +186,55 @@ test("新しいイラストで着せ替えと表情が変わり、動きを減�
   await page.screenshot({
     path: info.outputPath("illustrated-closet.png"),
     fullPage: true,
+    animations: "disabled",
+    scale: "css",
   });
   expect(failures).toEqual([]);
+});
+
+test("会話の男の子が瞬きし、静止設定とアルバムでは動きを止める", async ({
+  page,
+}) => {
+  await start(page);
+  await choose(page, "letter-kind");
+  const portrait = page.locator('.story-cast [data-person="haruto"]');
+  await expect(portrait).toHaveAttribute("data-art-status", "ready");
+  await portrait.scrollIntoViewIfNeeded();
+  await expect(portrait).toHaveClass(/portrait-moving/);
+  const blinkSeen = await portrait.evaluate(
+    (el) =>
+      new Promise<boolean>((resolve) => {
+        let seen = false;
+        const observer = new MutationObserver(() => {
+          if (el.getAttribute("data-blinking") === "true") seen = true;
+        });
+        observer.observe(el, {
+          attributes: true,
+          attributeFilter: ["data-blinking"],
+        });
+        setTimeout(() => {
+          observer.disconnect();
+          resolve(seen);
+        }, 15000);
+      }),
+  );
+  expect(blinkSeen).toBe(true);
+  await page.locator('[data-choice="gate-ren"]').click();
+  const ren = page.locator('.story-cast [data-person="ren"]');
+  await expect(ren).toHaveAttribute("data-expression", "smile");
+  await expect(ren.locator(".portrait-blink")).toHaveAttribute(
+    "data-frame",
+    "3",
+  );
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(ren).not.toHaveClass(/portrait-moving/);
+  await expect(ren).toHaveAttribute("data-blinking", "false");
+  expect(
+    await ren.evaluate((el) => el.getAnimations({ subtree: true }).length),
+  ).toBe(0);
+  await nav(page, "アルバム");
+  await expect(
+    page.locator(".portrait.small.illustrated-portrait"),
+  ).toHaveCount(4);
+  await expect(page.locator(".portrait.small .portrait-blink")).toHaveCount(0);
 });

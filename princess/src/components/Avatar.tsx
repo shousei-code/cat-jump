@@ -69,6 +69,17 @@ export function Avatar({
   const mood: Expression = expression === "happy" ? "joy" : expression;
   const signature = Object.values(eq).join("-");
   const [changing, setChanging] = useState(false);
+  const [reacting, setReacting] = useState(false);
+  const lastMood = useRef(mood);
+  useEffect(() => {
+    setReacting(false);
+    if (lastMood.current === mood) return;
+    lastMood.current = mood;
+    if (!animate || quality === "still") return;
+    setReacting(true);
+    const timer = setTimeout(() => setReacting(false), 540);
+    return () => clearTimeout(timer);
+  }, [mood, animate, quality]);
   const previous = useRef(signature);
   useEffect(() => {
     if (animate && previous.current !== signature) {
@@ -151,7 +162,7 @@ export function Avatar({
   return (
     <div
       ref={ref}
-      className={`avatar-art raster-avatar ${className} ${animate && visible ? "is-animated" : ""} ${changing ? "is-changing" : ""}`}
+      className={`avatar-art raster-avatar ${className} ${animate && visible ? "is-animated" : ""} ${changing ? "is-changing" : ""} ${reacting ? "is-reacting" : ""}`}
       role="img"
       aria-label={label + "・" + EXPRESSIONS[mood].label}
       data-expression={mood}

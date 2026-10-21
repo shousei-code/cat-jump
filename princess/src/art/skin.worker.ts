@@ -18,9 +18,9 @@ self.onmessage = async (
     const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
     recolorSkin(image, tone);
     ctx.putImageData(image, 0, 0);
+    // Runtime-only texture: lossless PNG avoids expensive WebP recompression on every new tone.
     const blob = await canvas.convertToBlob({
-      type: "image/webp",
-      quality: 0.92,
+      type: "image/png",
     });
     self.postMessage({ key, blob });
   } catch {

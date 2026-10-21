@@ -2011,3 +2011,99 @@ select {
   color: #745d80;
   font-size: 12px;
 }
+
+/* Illustrated cast motion: layered eyes preserve the original mouth/hair/outline. */
+.portrait-reaction,
+.portrait-pose {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 95%;
+}
+.portrait-pose > .raster-sprite {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.illustrated-portrait[data-art-status="loading"] .portrait-reaction {
+  visibility: hidden;
+}
+.portrait-moving .portrait-pose {
+  animation: portrait-breathe 5.8s ease-in-out infinite;
+}
+.portrait-moving .portrait-reaction {
+  animation: portrait-nod 0.54s ease-out both;
+}
+.portrait-blink {
+  opacity: 0;
+  --blink-x: 54%;
+  --blink-y: 43%;
+  mask-image: radial-gradient(
+    ellipse 24% 11% at var(--blink-x) var(--blink-y),
+    #000 85%,
+    transparent 100%
+  );
+}
+[data-person="ren"] .portrait-blink {
+  --blink-x: 50%;
+}
+[data-person="kaito"] .portrait-blink {
+  --blink-x: 52%;
+}
+[data-pose="2"] .portrait-blink {
+  --blink-y: 41%;
+}
+[data-person="ren"][data-pose="2"] .portrait-blink {
+  --blink-y: 43%;
+}
+[data-blinking="true"] .portrait-blink {
+  opacity: 1;
+}
+.is-reacting:not(.is-changing) .doll-frame {
+  animation: koto-response 0.54s ease-out both;
+}
+@keyframes portrait-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(0.35%) scaleY(1.003);
+  }
+}
+@keyframes portrait-nod {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  45% {
+    transform: translateY(0.6%) rotate(0.45deg);
+  }
+}
+@keyframes koto-response {
+  0%,
+  100% {
+    transform: translate(-50%, -50%);
+  }
+  45% {
+    transform: translate(-50%, -50.5%) rotate(0.55deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portrait-moving .portrait-pose,
+  .portrait-moving .portrait-reaction,
+  .is-reacting .doll-frame {
+    animation: none !important;
+  }
+}
+
+/* Source rows overlap by a few pixels: hide neighboring collars at the top edge. */
+[data-pose="1"] .portrait-pose,
+[data-pose="2"] .portrait-pose {
+  clip-path: inset(3.5% 0 0 0);
+}
+[data-person="aoi"][data-pose="1"] .portrait-pose,
+[data-person="aoi"][data-pose="2"] .portrait-pose,
+[data-person="kaito"][data-pose="1"] .portrait-pose,
+[data-person="kaito"][data-pose="2"] .portrait-pose {
+  clip-path: inset(5.5% 0 0 0);
+}

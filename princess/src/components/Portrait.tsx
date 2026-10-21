@@ -1,3 +1,4 @@
+import { usePortraitMotion } from "../art/usePortraitMotion";
 import { Avatar } from "./Avatar";
 import { useArtReady } from "../art/useArtReady";
 import { RasterSprite } from "./RasterSprite";
@@ -19,7 +20,14 @@ export function Portrait({
   const mood = happy ? "joy" : expression,
     p = PEOPLE[person],
     boy = BOYS[person];
-  const artStatus = useArtReady(boy ? [boy.sheet] : [], !!boy && !small);
+  const artStatus = useArtReady(
+    boy ? [boy.sheet, boy.blinkSheet] : [],
+    !!boy && !small,
+  );
+  const motion = usePortraitMotion(
+    !!boy && !small && artStatus === "ready",
+    person,
+  );
   if (boy) {
     const row = ["joy", "smile", "wink", "closedSmile", "heart"].includes(mood)
       ? 1
@@ -28,12 +36,15 @@ export function Portrait({
         : 0;
     return (
       <div
-        className={`portrait illustrated-portrait ${small ? "small" : ""}`}
+        ref={motion.ref}
+        className={`portrait illustrated-portrait ${small ? "small" : ""} ${motion.moving ? "portrait-moving" : ""}`}
         role="img"
         aria-label={p.name + "のイラスト"}
         data-person={person}
         data-expression={mood}
         data-art-status={artStatus}
+        data-blinking={motion.blink}
+        data-pose={row}
       >
         {artStatus !== "ready" && (
           <span className="portrait-loading" role="status">
@@ -42,11 +53,23 @@ export function Portrait({
               : "イラストを読み込み中…"}
           </span>
         )}
-        <RasterSprite
-          sheet={boy.sheet}
-          frame={row * 2 + boy.column}
-          eager={!small}
-        />
+        <div className="portrait-reaction" key={row}>
+          <div className="portrait-pose">
+            <RasterSprite
+              sheet={boy.sheet}
+              frame={row * 2 + boy.column}
+              eager={!small}
+            />
+            {!small && (
+              <RasterSprite
+                sheet={boy.blinkSheet}
+                frame={row * 2 + boy.column}
+                className="portrait-blink"
+                eager
+              />
+            )}
+          </div>
+        </div>
       </div>
     );
   }
