@@ -37,3 +37,11 @@ GitHub の Settings → Pages → Deploy from a branch → main / (root) → Sav
 
 `node --test tests/life-state.test.mjs` で売買・給料・食事・プレゼント・ペット・セーブ検証。
 ブラウザーの検証にはPython PlaywrightとChromiumを使用。ローカルサーバーを8001番ポートで起動して `python3 tests/browser-smoke.py` を実行。スマホ操作だけの再検証は `python3 tests/mobile-smoke.py`。
+
+## ウサギのアスレチック
+
+`bunny/` に2D横スクロールゲーム「モコのぴょんぴょんアスレチック」を追加。
+草原・森・空の3ステージ。にんじん収集、動く足場、チェックポイント、一時停止、ローカルのクリア記録。
+矢印キー/A・Dで移動、スペース/上矢印でジャンプ。モバイルは画面の左右とジャンプの同時押し。
+外部ライブラリーや画像のダウンロードは不要。失敗しても回数制限なく再挑戦できます。
+検証：8002番で静的サーバーを起動し、`python3 tests/bunny-platforms.py`（全3コースを実際の移動・ジャンプ操作でクリア）と `python3 tests/bunny-touch.py`（同時タッチ）を実行。Python Playwright と Chromium が必要です。
