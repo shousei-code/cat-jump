@@ -32,7 +32,7 @@ export function Battle({
     );
   const rivalState = {
     ...state,
-    hairColor: "#8573a0",
+    hairColor: "#8580b7",
     eyeColor: "#826397",
     equipped: {
       hair: "hair-long",
@@ -64,6 +64,13 @@ export function Battle({
               ? "✧ ことちゃんの勝利！"
               : "あと一歩。着替えてもう一度！"}
           </h2>
+          <div className="battle-result-character">
+            <Avatar
+              state={state}
+              outfit={result.outfit}
+              expression={result.win ? "joy" : "sad"}
+            />
+          </div>
           <div className="result-score">
             <span>
               ことちゃん <b>{result.score}</b>

@@ -154,6 +154,18 @@ export default function App() {
       {screen === "title" ? (
         <main id="main" className="title-screen academy-art">
           <div className="title-shade" />
+          <div className="petal-field" aria-hidden="true">
+            {Array.from({ length: 12 }, (_, i) => (
+              <i
+                key={i}
+                style={{
+                  left: i * 8.7 + "%",
+                  animationDelay: -i * 1.7 + "s",
+                  animationDuration: 13 + (i % 4) * 3 + "s",
+                }}
+              />
+            ))}
+          </div>
           <div className="title-copy">
             <span className="eyebrow">A LITTLE COURAGE. A LITTLE MAGIC.</span>
             <span className="title-kicker">
@@ -197,7 +209,7 @@ export default function App() {
           </div>
           <div className="title-character">
             <div className="character-halo" />
-            <Avatar state={state} expression="calm" />
+            <Avatar state={state} expression="smile" />
             <span>
               ことちゃん
               <br />
@@ -244,7 +256,7 @@ export default function App() {
                 <span>◈ {state.coins}</span>
               </div>
             </header>
-            <main id="main" className="main-content">
+            <main id="main" className="main-content" key={screen}>
               {screen === "create" ? (
                 <>
                   <div className="page-heading">

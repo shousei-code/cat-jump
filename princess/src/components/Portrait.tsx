@@ -1,4 +1,7 @@
 import { Avatar } from "./Avatar";
+import { useArtReady } from "../art/useArtReady";
+import { RasterSprite } from "./RasterSprite";
+import { BOYS, type Expression } from "../art/manifest";
 import { PEOPLE } from "../game/data";
 import { freshState } from "../game/engine";
 import type { Person } from "../game/types";
@@ -6,25 +9,49 @@ export function Portrait({
   person,
   happy = false,
   small = false,
+  expression = "calm",
 }: {
   person: Person;
   happy?: boolean;
   small?: boolean;
+  expression?: Expression;
 }) {
-  const p = PEOPLE[person];
-  if (p.portrait !== null)
+  const mood = happy ? "joy" : expression,
+    p = PEOPLE[person],
+    boy = BOYS[person];
+  const artStatus = useArtReady(boy ? [boy.sheet] : [], !!boy && !small);
+  if (boy) {
+    const row = ["joy", "smile", "wink", "closedSmile", "heart"].includes(mood)
+      ? 1
+      : ["sad", "worried", "angry"].includes(mood)
+        ? 2
+        : 0;
     return (
       <div
-        className={`portrait ${small ? "small" : ""} ${happy ? "happy" : ""}`}
+        className={`portrait illustrated-portrait ${small ? "small" : ""}`}
         role="img"
-        aria-label={`${p.name}のイラスト`}
-        style={{
-          backgroundPosition: `${(p.portrait % 3) * 50}% ${Math.floor(p.portrait / 3) * 100}%`,
-        }}
-      />
+        aria-label={p.name + "のイラスト"}
+        data-person={person}
+        data-expression={mood}
+        data-art-status={artStatus}
+      >
+        {artStatus !== "ready" && (
+          <span className="portrait-loading" role="status">
+            {artStatus === "error"
+              ? "画像を読み込めません"
+              : "イラストを読み込み中…"}
+          </span>
+        )}
+        <RasterSprite
+          sheet={boy.sheet}
+          frame={row * 2 + boy.column}
+          eager={!small}
+        />
+      </div>
     );
+  }
   const state = freshState();
-  state.hairColor = { mio: "#a87183", yui: "#9d805d", seira: "#8273a0" }[
+  state.hairColor = { mio: "#b880a7", yui: "#d6a65e", seira: "#8580b7" }[
     person as "mio" | "yui" | "seira"
   ];
   state.equipped = {
@@ -40,11 +67,7 @@ export function Portrait({
   };
   return (
     <div className={`portrait drawn ${small ? "small" : ""}`}>
-      <Avatar
-        state={state}
-        expression={happy ? "happy" : "calm"}
-        label={p.name}
-      />
+      <Avatar state={state} expression={mood} label={p.name} animate={!small} />
     </div>
   );
 }

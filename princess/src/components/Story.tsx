@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { SCENES, PEOPLE } from "../game/data";
-import type { GameState } from "../game/types";
+import type { GameState, Person, Scene } from "../game/types";
 import type { Action } from "../game/engine";
 import { Avatar } from "./Avatar";
 import { Portrait } from "./Portrait";
+import type { Expression } from "../art/manifest";
 export function Story({
   state,
   dispatch,
@@ -13,7 +14,12 @@ export function Story({
   dispatch: (a: Action) => void;
   go: (s: string) => void;
 }) {
-  const [reply, setReply] = useState("");
+  const [reply, setReply] = useState<{
+    text: string;
+    scene: Scene;
+    speaker: Person | "narrator";
+    mood: Expression;
+  } | null>(null);
   if (state.node === "complete")
     return (
       <section className="completion panel">
@@ -64,7 +70,21 @@ export function Story({
         <p className="fine">お友達ボーナスを受け取りました：30コイン・120EXP</p>
       </section>
     );
-  const scene = SCENES[state.node];
+  const scene = reply?.scene || SCENES[state.node];
+  const speaker = reply?.speaker || scene.speaker;
+  const mood: Expression =
+    reply?.mood ||
+    (
+      {
+        letter: "calm",
+        gate: "heart",
+        welcome: "smile",
+        invite: "worried",
+        festival: "joy",
+        epilogue: "surprised",
+      } as Record<string, Expression>
+    )[scene.id] ||
+    "calm";
   return (
     <>
       <div className="page-heading">
@@ -76,25 +96,28 @@ export function Story({
       </div>
       <section className="story-stage academy-art">
         <div className="location-label">✧ {scene.location}</div>
-        <div className="story-cast">
-          {scene.speaker === "narrator" ? (
-            <Avatar state={state} />
+        <div className="story-cast" key={speaker}>
+          {speaker === "narrator" ? (
+            <Avatar state={state} expression={mood} />
           ) : (
-            <Portrait person={scene.speaker} />
+            <Portrait person={speaker} expression={reply ? "smile" : "calm"} />
           )}
         </div>
+        {speaker !== "narrator" && (
+          <div className="story-koto">
+            <Avatar state={state} expression={mood} />
+          </div>
+        )}
         <div className="dialogue">
           <span className="speaker">
-            {scene.speaker === "narrator"
-              ? "ことちゃんの物語"
-              : PEOPLE[scene.speaker].name}
+            {speaker === "narrator" ? "ことちゃんの物語" : PEOPLE[speaker].name}
           </span>
-          <p>{reply || scene.text}</p>
+          <p>{reply?.text || scene.text}</p>
         </div>
       </section>
       <div className="choices">
         {reply ? (
-          <button className="primary" onClick={() => setReply("")}>
+          <button className="primary" onClick={() => setReply(null)}>
             つづける →
           </button>
         ) : (
@@ -104,7 +127,17 @@ export function Story({
               data-choice={c.id}
               onClick={() => {
                 dispatch({ type: "CHOICE", id: c.id });
-                setReply(c.reply);
+                setReply({
+                  text: c.reply,
+                  scene,
+                  speaker: c.person || scene.speaker,
+                  mood:
+                    c.trait === "kind"
+                      ? "shy"
+                      : c.trait === "brave"
+                        ? "joy"
+                        : "surprised",
+                });
               }}
             >
               <span>{c.label}</span>

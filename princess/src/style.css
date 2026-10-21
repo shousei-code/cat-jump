@@ -411,7 +411,7 @@ nav button span {
 }
 .appearance {
   display: grid;
-  grid-template-columns: 50px 1fr;
+  grid-template-columns: 50px minmax(0, 1fr);
   align-items: center;
   gap: 12px;
   margin: 24px 0 0;
@@ -422,6 +422,7 @@ nav button span {
 }
 .swatches {
   display: flex;
+  flex-wrap: wrap;
   gap: 9px;
 }
 .swatches button {
@@ -636,7 +637,7 @@ nav button span {
   box-shadow: 0 0 60px #fff9;
 }
 .portrait {
-  background-image: url("/art/classmates.png");
+  background-image: none;
   background-size: 300% 200%;
   background-repeat: no-repeat;
 }
@@ -1463,77 +1464,550 @@ select {
   }
 }
 
-/* Animate large character views only; collection thumbnails stay quiet. */
-.title-character .avatar-pose,
-.mirror .avatar-pose,
-.competitor .avatar-pose,
-.story-cast .avatar-pose {
-  transform-origin: 140px 450px;
-  animation: princess-breathe 5s ease-in-out infinite;
+/* Illustrated character system — original raster art, no SVG character geometry. */
+.raster-avatar {
+  container-type: size;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
-.title-character .avatar-eyes,
-.mirror .avatar-eyes,
-.competitor .avatar-eyes,
-.story-cast .avatar-eyes {
-  transform-origin: 140px 114px;
-  animation: princess-blink 6.7s ease-in-out infinite;
+.raster-avatar .doll-frame {
+  position: absolute;
+  width: min(100cqw, 66.666cqh);
+  height: min(150cqw, 100cqh);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  isolation: isolate;
 }
-.title-character .avatar-hair-back,
-.mirror .avatar-hair-back,
-.competitor .avatar-hair-back,
-.story-cast .avatar-hair-back {
-  transform-origin: 140px 65px;
-  animation: princess-hair 5s ease-in-out infinite;
+.doll-pose {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 96%;
 }
-.title-character .avatar-fringe,
-.mirror .avatar-fringe,
-.story-cast .avatar-fringe {
-  transform-origin: 140px 45px;
-  animation: princess-fringe 5s ease-in-out infinite;
+.raster-sprite {
+  display: block;
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
 }
-.competitor.rival .avatar-eyes {
-  animation-delay: -2.1s;
+.raster-sprite img {
+  position: absolute;
+  max-width: none;
+  object-fit: fill;
+  user-select: none;
 }
-@keyframes princess-breathe {
+.art-missing {
+  font-size: 10px;
+  color: #745d80;
+  background: #fff9;
+  display: block;
+}
+.doll-shadow {
+  position: absolute;
+  left: 31%;
+  top: 96%;
+  width: 38%;
+  height: 2%;
+  background: #75608e33;
+  filter: blur(4px);
+  border-radius: 50%;
+}
+.doll-body-region,
+.doll-feet-region {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.doll-body-region {
+  clip-path: inset(0 0 18% 0);
+}
+.doll-feet-region {
+  clip-path: inset(82% 0 0 0);
+}
+.doll-face {
+  z-index: 3;
+}
+.doll-eyes-tint {
+  z-index: 4;
+  mask-image:
+    radial-gradient(ellipse 13% 12% at 28% 50%, #000 65%, transparent 100%),
+    radial-gradient(ellipse 13% 12% at 73% 47%, #000 65%, transparent 100%);
+}
+.doll-hair-back {
+  transform-origin: 50% 17%;
+}
+.doll-hair-front {
+  clip-path: inset(0 0 40% 0);
+  z-index: 5;
+  transform-origin: 50% 15%;
+}
+.doll-accessory {
+  z-index: 6;
+  transform-origin: 50% 30%;
+}
+.is-animated .doll-pose {
+  animation: illustrated-breathe 5.4s ease-in-out infinite;
+}
+.is-animated .doll-hair-back {
+  animation: illustrated-hair 6.2s ease-in-out infinite;
+}
+.is-animated .doll-accessory {
+  animation: illustrated-ribbon 5.5s ease-in-out infinite;
+}
+.doll-sparkle {
+  position: absolute;
+  z-index: 8;
+  pointer-events: none;
+  color: #f9e4ad;
+  text-shadow: 0 0 12px #fff;
+  font-size: 20px;
+  opacity: 0;
+}
+.doll-sparkle.s1 {
+  top: 33%;
+  left: 18%;
+}
+.doll-sparkle.s2 {
+  top: 52%;
+  right: 13%;
+}
+.doll-sparkle.s3 {
+  top: 72%;
+  left: 23%;
+}
+.is-changing .doll-frame {
+  animation: coordinate-turn 0.65s ease both;
+}
+.is-changing .doll-sparkle {
+  animation: wardrobe-sparkle 0.65s ease both;
+}
+.is-changing .s2 {
+  animation-delay: 0.08s;
+}
+.is-changing .s3 {
+  animation-delay: 0.15s;
+}
+@keyframes illustrated-breathe {
   0%,
   100% {
     transform: translateY(0) scaleY(1);
   }
   50% {
-    transform: translateY(-0.7px) scaleY(1.003);
+    transform: translateY(-0.2%) scaleY(1.003);
   }
 }
-@keyframes princess-blink {
-  0%,
-  43%,
-  47%,
-  100% {
-    transform: scaleY(1);
-  }
-  45% {
-    transform: scaleY(0.06);
-  }
-}
-@keyframes princess-hair {
+@keyframes illustrated-hair {
   0%,
   100% {
-    transform: rotate(-0.65deg);
+    transform: rotate(-0.35deg);
   }
   50% {
-    transform: rotate(0.65deg);
+    transform: rotate(0.35deg);
   }
 }
-@keyframes princess-fringe {
+@keyframes illustrated-ribbon {
   0%,
   100% {
-    transform: rotate(-0.15deg);
+    transform: rotate(-1deg);
   }
   50% {
-    transform: rotate(0.25deg);
+    transform: rotate(1deg);
+  }
+}
+@keyframes coordinate-turn {
+  0% {
+    transform: translate(-50%, -50%) rotateY(0);
+    filter: brightness(1);
+  }
+  40% {
+    transform: translate(-50%, -50%) rotateY(23deg);
+    filter: brightness(1.35);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateY(0);
+    filter: brightness(1);
+  }
+}
+@keyframes wardrobe-sparkle {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.4);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(1.2);
+  }
+}
+.item-preview .raster-avatar {
+  height: 240px;
+  width: 100%;
+  position: absolute;
+  top: -45px;
+}
+.item-preview.hair .raster-avatar {
+  height: 570px;
+  top: -8px;
+  width: 150%;
+  left: -25%;
+}
+.item-preview.shoes .raster-avatar {
+  height: 400px;
+  top: -280px;
+}
+.item-preview.accessory .raster-avatar {
+  height: 630px;
+  top: -5px;
+  width: 165%;
+  left: -32.5%;
+}
+.competitor .raster-avatar {
+  height: 330px;
+}
+.title-character .raster-avatar {
+  filter: drop-shadow(0 14px 20px #77527c20);
+}
+.title-character {
+  height: 86%;
+  bottom: 5%;
+  right: 3%;
+  width: 44%;
+  max-height: 900px;
+}
+.title-copy h1 {
+  animation: logo-reveal 1.2s ease both;
+}
+@keyframes logo-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+.petal-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.petal-field i {
+  position: absolute;
+  top: -12%;
+  width: 9px;
+  height: 16px;
+  border-radius: 90% 0 90% 15%;
+  background: linear-gradient(45deg, #ecc0d399, #fff5f2);
+  animation: petal-fall 18s linear infinite;
+  opacity: 0.7;
+}
+@keyframes petal-fall {
+  0% {
+    transform: translate3d(0, -30px, 0) rotate(0);
+  }
+  50% {
+    transform: translate3d(50px, 55svh, 0) rotate(220deg);
+  }
+  100% {
+    transform: translate3d(-35px, 115svh, 0) rotate(450deg);
+  }
+}
+.illustrated-portrait {
+  position: relative;
+  background-image: none !important;
+  background-color: transparent !important;
+  overflow: hidden;
+}
+.illustrated-portrait > .raster-sprite {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.portrait.drawn .raster-avatar {
+  height: 380%;
+  width: 180%;
+  position: absolute;
+  left: -40%;
+  top: 0;
+}
+.portrait.drawn {
+  position: relative;
+}
+.story-stage {
+  height: 500px;
+  background-position: center 45%;
+  box-shadow: inset 0 -90px 70px #5b386425;
+}
+.story-cast {
+  width: 370px;
+  height: 370px;
+  right: 9%;
+  bottom: 105px;
+  animation: character-arrive 0.55s ease both;
+}
+.story-cast .portrait {
+  height: 100%;
+  width: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  background-color: transparent;
+}
+.story-cast .drawn {
+  overflow: hidden;
+  background: none;
+}
+.story-cast > .raster-avatar {
+  height: 510px;
+  position: absolute;
+  bottom: -95px;
+}
+.story-koto {
+  position: absolute;
+  width: 175px;
+  height: 270px;
+  bottom: 100px;
+  left: 5%;
+  filter: drop-shadow(0 7px 10px #6d4c6c33);
+}
+.dialogue {
+  z-index: 8;
+  background: linear-gradient(120deg, #fffdf9f7, #fff8fff2);
+  padding: 25px 30px 20px;
+  border-color: #d8bd8d;
+}
+@keyframes character-arrive {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.battle-result-character {
+  height: 300px;
+  margin: -15px auto 0;
+  max-width: 260px;
+}
+.expression-studio {
+  padding: 15px 0;
+  margin-top: 15px;
+  border-top: 1px solid #e5d3e5;
+}
+.expression-studio summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: #8e6b95;
+}
+.expression-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.expression-buttons button {
+  font-size: 10px;
+  padding: 4px 9px;
+  min-height: 32px;
+}
+.quality-light .doll-hair-back,
+.quality-light .doll-accessory,
+.quality-light .petal-field i {
+  animation: none !important;
+}
+.quality-light .petal-field i:nth-child(n + 5) {
+  display: none;
+}
+.quality-still * {
+  animation: none !important;
+  transition: none !important;
+}
+.quality-still .petal-field {
+  display: none;
+}
+@media (max-width: 700px) {
+  .title-character {
+    height: 380px;
+    width: 280px;
+    bottom: 35px;
+    right: calc(50% - 140px);
+  }
+  .title-character > span {
+    right: -25px;
+    bottom: 0;
+  }
+  .title-screen {
+    min-height: 960px;
+  }
+  .story-stage {
+    height: 500px;
+  }
+  .story-cast {
+    width: 300px;
+    height: 300px;
+    right: calc(50% - 150px);
+    bottom: 160px;
+  }
+  .story-koto {
+    width: 105px;
+    height: 200px;
+    bottom: 150px;
+    left: 0;
+  }
+  .story-cast > .raster-avatar {
+    height: 430px;
+    bottom: -110px;
+  }
+  .competitor .raster-avatar {
+    height: 240px;
+  }
+  .item-preview .raster-avatar {
+    height: 215px;
+    top: -40px;
+  }
+  .item-preview.hair .raster-avatar {
+    height: 470px;
+    top: -4px;
+  }
+  .item-preview.shoes .raster-avatar {
+    height: 350px;
+    top: -245px;
+  }
+  .item-preview.accessory .raster-avatar {
+    height: 530px;
+    top: -5px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .avatar-art * {
-    animation: none !important;
+  .petal-field {
+    display: none;
   }
+  .raster-avatar * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+.doll-blink {
+  z-index: 4;
+  clip-path: polygon(2% 29%, 98% 29%, 98% 65%, 2% 65%);
+}
+@media (max-width: 700px) {
+  .expression-studio {
+    grid-column: 1/-1;
+    grid-row: 4;
+  }
+  .expression-buttons button {
+    font-size: 10px;
+  }
+}
+/* Keep the painted fringe above the eye line; the full wig remains behind the face. */
+.doll-hair-front {
+  clip-path: inset(0 0 70% 0);
+}
+.expression-closeup {
+  height: 220px;
+  width: 200px;
+  position: relative;
+  overflow: hidden;
+  margin: 12px auto;
+  background: radial-gradient(ellipse, #fffaf9, #f4e5ee);
+  border-radius: 110px 110px 18px 18px;
+}
+.expression-closeup .raster-avatar {
+  position: absolute;
+  width: 900px;
+  height: 1350px;
+  max-width: none;
+  left: calc(50% - 450px);
+  top: -40px;
+}
+.raster-avatar[data-art-status="loading"] .doll-frame,
+.raster-avatar[data-art-status="error"] .doll-frame {
+  opacity: 0;
+}
+.art-loading {
+  position: absolute;
+  top: 45%;
+  left: 15%;
+  right: 15%;
+  text-align: center;
+  font-size: 12px;
+  color: #98769a;
+  background: #fff9;
+  border-radius: 14px;
+  padding: 15px;
+}
+.doll-hair-front {
+  mask-image: linear-gradient(#000 0 24%, transparent 31%);
+}
+.magic-prize {
+  height: 250px;
+  max-width: 210px;
+  margin: auto;
+}
+.magic-reveal .doll-sparkle {
+  animation: wardrobe-sparkle 1.6s ease both;
+}
+.magic-reveal .s2 {
+  animation-delay: 0.25s;
+}
+.magic-reveal .s3 {
+  animation-delay: 0.5s;
+}
+.main-content {
+  animation: school-transition 0.4s ease both;
+}
+@keyframes school-transition {
+  from {
+    opacity: 0.4;
+    filter: brightness(1.12);
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+.earring-left {
+  clip-path: inset(0 50% 0 0);
+}
+.earring-right {
+  clip-path: inset(0 0 0 50%);
+}
+.doll-eyes-tint {
+  mask-image:
+    radial-gradient(
+      ellipse 13% 12% at 28% var(--eye-y, 49%),
+      #000 65%,
+      transparent 100%
+    ),
+    radial-gradient(
+      ellipse 13% 12% at 73% var(--eye-y, 49%),
+      #000 65%,
+      transparent 100%
+    );
+}
+
+.illustrated-portrait[data-art-status="loading"] > .raster-sprite {
+  visibility: hidden;
+}
+.portrait-loading {
+  position: absolute;
+  inset: 40% 10% auto;
+  text-align: center;
+  padding: 12px;
+  border-radius: 16px;
+  background: #fffc;
+  color: #745d80;
+  font-size: 12px;
 }

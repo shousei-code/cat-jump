@@ -13,6 +13,7 @@ import {
 import { scoreOutfit, type Action } from "../game/engine";
 import type { GameState, Slot, Tag } from "../game/types";
 import { Avatar } from "./Avatar";
+import { EXPRESSIONS, type Expression } from "../art/manifest";
 export function Closet({
   state,
   dispatch,
@@ -24,6 +25,7 @@ export function Closet({
   onBattle: () => void;
   toast: (t: string) => void;
 }) {
+  const [expression, setExpression] = useState<Expression>("calm");
   const [slot, setSlot] = useState<Slot>("outfit"),
     [selected, setSelected] = useState(state.equipped.outfit),
     [filter, setFilter] = useState<"owned" | "all">("owned");
@@ -53,7 +55,7 @@ export function Closet({
             <b>✧</b>
           </div>
           <div className="mirror">
-            <Avatar state={state} />
+            <Avatar state={state} expression={expression} />
           </div>
           <div className="coordinate-tags">
             {Object.values(state.equipped).map((id) => (
@@ -65,6 +67,25 @@ export function Closet({
               </span>
             ))}
           </div>
+          <details className="expression-studio">
+            <summary>表情を見てみる</summary>
+            <div className="expression-closeup">
+              <Avatar state={state} expression={expression} animate={false} />
+            </div>
+            <div className="expression-buttons">
+              {Object.entries(EXPRESSIONS)
+                .filter(([id]) => id !== "blink")
+                .map(([id, mood]) => (
+                  <button
+                    key={id}
+                    aria-pressed={expression === id}
+                    onClick={() => setExpression(id as Expression)}
+                  >
+                    {mood.label}
+                  </button>
+                ))}
+            </div>
+          </details>
           <div className="appearance">
             <p>髪色</p>
             <div className="swatches">
@@ -162,6 +183,7 @@ export function Closet({
                     state={state}
                     outfit={{ ...state.equipped, [i.slot]: i.id }}
                     label={i.name}
+                    animate={false}
                   />
                   {state.equipped[i.slot] === i.id && (
                     <span className="equipped-label">着用中</span>

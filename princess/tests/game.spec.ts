@@ -124,17 +124,66 @@ test("ファイルを別セッションに読み込み、続きから再開す�
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await page.getByRole("button", { name: "セーブ・音の設定" }).click();
-  await page
-    .locator("input[type=file]")
-    .setInputFiles({
-      name: "save.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(saved),
-    });
+  await page.locator("input[type=file]").setInputFiles({
+    name: "save.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(saved),
+  });
   await expect(page.getByRole("dialog")).toBeVisible();
   await page.getByRole("button", { name: "確認して進む" }).click();
   await page.getByRole("button", { name: "物語のつづきから" }).click();
   await expect(
     page.getByRole("heading", { name: "桜の向こうの、新しい友達。" }),
   ).toBeVisible();
+});
+
+test("新しいイラストで着せ替えと表情が変わり、動きを減らす設定に対応する", async ({
+  page,
+}, info) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  if (info.project.name === "mobile") {
+    await page.addInitScript(() =>
+      Object.defineProperty(window, "OffscreenCanvas", { value: undefined }),
+    );
+  }
+  const failures: string[] = [];
+  page.on("response", (r) => {
+    if (r.status() >= 400) failures.push(r.url());
+  });
+  await page.goto("/");
+  const titleAvatar = page.locator(".title-character .raster-avatar");
+  await expect(titleAvatar).toHaveAttribute("data-art-status", "ready");
+  await expect(page.locator(".title-character svg")).toHaveCount(0);
+  await page.getByRole("button", { name: "新しい物語をはじめる" }).click();
+  const mirror = page.locator(".mirror .raster-avatar");
+  await expect(mirror).toHaveAttribute("data-art-status", "ready");
+  await page.locator('[data-item="dress-mint"]').click();
+  await expect(mirror).toHaveAttribute("data-outfit", "dress-mint");
+  await expect(
+    mirror.locator('.doll-body-region [data-sheet="wardrobe-a"]'),
+  ).toHaveAttribute("data-frame", "1");
+  await page.getByText("表情を見てみる", { exact: true }).click();
+  await page.getByRole("button", { name: "ウインク", exact: true }).click();
+  await expect(mirror).toHaveAttribute("data-expression", "wink");
+  await expect(mirror.locator(".doll-face")).toHaveAttribute("data-frame", "7");
+  await page.getByRole("button", { name: "驚き", exact: true }).click();
+  await expect(mirror.locator(".doll-face")).toHaveAttribute("data-frame", "2");
+  expect(
+    await mirror.evaluate((el) => el.getAnimations({ subtree: true }).length),
+  ).toBe(0);
+  await page.getByRole("button", { name: "肌の色 3", exact: true }).click();
+  await expect(mirror.locator(".doll-body-region img")).toHaveAttribute(
+    "src",
+    /^blob:/,
+  );
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+  await page.screenshot({
+    path: info.outputPath("illustrated-closet.png"),
+    fullPage: true,
+  });
+  expect(failures).toEqual([]);
 });

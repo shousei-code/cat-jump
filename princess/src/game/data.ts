@@ -230,7 +230,7 @@ export const INITIAL_OWNED = ITEMS.filter((i) => !i.price && !i.unlock).map(
   (i) => i.id,
 );
 export const INITIAL_OUTFIT: Outfit = {
-  hair: "hair-bob",
+  hair: "hair-long",
   outfit: "dress-uniform",
   shoes: "shoes-basic",
   accessory: "acc-ribbon",

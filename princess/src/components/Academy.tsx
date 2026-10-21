@@ -3,6 +3,7 @@ import { CLUES, PEOPLE } from "../game/data";
 import type { GameState, Person } from "../game/types";
 import type { Action } from "../game/engine";
 import { Portrait } from "./Portrait";
+import { Avatar } from "./Avatar";
 export function Academy({
   state,
   dispatch,
@@ -64,6 +65,15 @@ export function Academy({
                 <br />
                 秘密のドレスを手に入れました。
               </p>
+              <div className="magic-prize">
+                <Avatar
+                  state={state}
+                  outfit={{ ...state.equipped, outfit: "dress-secret" }}
+                  expression="joy"
+                  className="magic-reveal"
+                  label="秘密の温室ドレスのごほうび"
+                />
+              </div>
               <span className="tag">✧ 謎解きクリア</span>
             </>
           ) : (
