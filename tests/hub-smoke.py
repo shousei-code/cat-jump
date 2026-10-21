@@ -3,7 +3,7 @@ with sync_playwright() as pw:
  b=pw.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox'])
  page=b.new_page(viewport={'width':390,'height':844});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
  page.goto('http://127.0.0.1:8003/')
- assert page.locator('.card').count()==15
+ assert page.locator('.card').count()==16
  urls=page.locator('.card a').evaluate_all('(xs)=>xs.map(a=>a.href)')
  for url in urls: assert page.request.get(url).status==200,url
  page.locator('.favorite').first.click()
@@ -21,4 +21,4 @@ with sync_playwright() as pw:
  assert page.locator('#game').count()==1
  assert not errors,errors
  b.close()
-print('PASS all 15 destinations, favorite persistence, search, recent history, home-screen help, preserved cat game and mobile layout')
+print('PASS all 16 destinations, favorite persistence, search, recent history, home-screen help, preserved cat game and mobile layout')
