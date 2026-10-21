@@ -1462,3 +1462,78 @@ select {
     line-height: 1;
   }
 }
+
+/* Animate large character views only; collection thumbnails stay quiet. */
+.title-character .avatar-pose,
+.mirror .avatar-pose,
+.competitor .avatar-pose,
+.story-cast .avatar-pose {
+  transform-origin: 140px 450px;
+  animation: princess-breathe 5s ease-in-out infinite;
+}
+.title-character .avatar-eyes,
+.mirror .avatar-eyes,
+.competitor .avatar-eyes,
+.story-cast .avatar-eyes {
+  transform-origin: 140px 114px;
+  animation: princess-blink 6.7s ease-in-out infinite;
+}
+.title-character .avatar-hair-back,
+.mirror .avatar-hair-back,
+.competitor .avatar-hair-back,
+.story-cast .avatar-hair-back {
+  transform-origin: 140px 65px;
+  animation: princess-hair 5s ease-in-out infinite;
+}
+.title-character .avatar-fringe,
+.mirror .avatar-fringe,
+.story-cast .avatar-fringe {
+  transform-origin: 140px 45px;
+  animation: princess-fringe 5s ease-in-out infinite;
+}
+.competitor.rival .avatar-eyes {
+  animation-delay: -2.1s;
+}
+@keyframes princess-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(-0.7px) scaleY(1.003);
+  }
+}
+@keyframes princess-blink {
+  0%,
+  43%,
+  47%,
+  100% {
+    transform: scaleY(1);
+  }
+  45% {
+    transform: scaleY(0.06);
+  }
+}
+@keyframes princess-hair {
+  0%,
+  100% {
+    transform: rotate(-0.65deg);
+  }
+  50% {
+    transform: rotate(0.65deg);
+  }
+}
+@keyframes princess-fringe {
+  0%,
+  100% {
+    transform: rotate(-0.15deg);
+  }
+  50% {
+    transform: rotate(0.25deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .avatar-art * {
+    animation: none !important;
+  }
+}
