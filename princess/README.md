@@ -65,15 +65,17 @@ PC・スマホともボタンのクリック／タップで操作できます。
 
 広告・課金・チャット・個人情報収集・外部分析サービスはありません。
 
-## レビューとGitHub Pages
+## 公開と更新
 
-この変更は専用ブランチでレビューするためのものです。現在の公開サイトのトップ・既存ゲームを変更しません。
+遊ぶURL： https://shousei-code.github.io/cat-jump/princess-play/
 
-CIは単体テスト、ビルド、PC/スマホのブラウザテストを実行し、ビルド成果物とテストレポートを保存します。
+ユーザーの公開指示により、ビルドした静的ファイルをリポジトリ直下の `princess-play/` に配置。ゲームひろばにも入口を追加しています。既存のGitHub Pagesのmain / root配信設定で利用できます。`.nojekyll` で静的ファイルをそのまま配信します。
 
-公開は**レビューしてmainに取り込んだ後**、GitHubのSettings → Pages → SourceをGitHub Actionsに設定し、Actionsの「Publish reviewed Princess and existing games」をmainから手動実行します。公開ワークフローはmain以外で実行されません。既存ゲームを含むサイト全体を保持し、ビルド済みゲームを `/cat-jump/princess/` に追加します。ブランチへのpushだけでは公開しません。今回Pages設定変更・公開操作は行いません。
+更新時はこのディレクトリで `npm ci && npm run check` を実行し、ブラウザテスト後に `dist/` の内容でルートの `princess-play/` を置き換え、変更をレビューしてmainへ反映してください。ソースの `princess/` は残します。
 
-Viteのbaseは相対パス。distを任意のサブディレクトリに置いてHTTP配信できます。HTMLファイルの直接ダブルクリックではなくHTTPサーバーを使ってください。
+GitHub Actionsの手動公開ワークフローも `/princess-play/` に出力します。こちらを使う場合のみ、Settings → Pages → SourceをGitHub Actionsへ切り替え、mainから実行してください。CIはテストとビルド成果物を保存します。
+
+バックエンドは不要です。相対パスでビルドされるため、HTTPサーバーのサブディレクトリでも配信できます。
 
 ## アートと音
 
