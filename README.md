@@ -94,3 +94,9 @@ GitHub の Settings → Pages → Deploy from a branch → main / (root) → Sav
 動く針を的の中で止め、12工程を完成させる音のタイミングゲーム。ガラス・木・雨をWeb Audioで合成します。音量調整・ミュート・完成音の再生に対応。超むずは3ミスで終了、練習は回数無制限です。後半は的の移動と針の速度変化が加わります。Pまたはボタンで一時停止、画面非表示で自動停止。最高到達をブラウザに保存します。
 
 ポート8003でローカルサーバーを起動し、`python3 tests/asmr-smoke.py` で全工程成功・敗北・練習・一時停止・音声初期化・保存・スマホ幅を確認できます（Python Playwright / Chromium）。
+
+## 音の島のむずかしアスレチック (`sound-run/`)
+
+ウサギを操作する全3コースのASMRアスレチック。ガラス・木・雨・砂・泡の足場に着地すると、Web Audioによる異なる合成音が鳴ります。狭い床・横移動する床・着地0.85秒後に消える床を渡ってゴールへ。消えた床は2秒後に復帰。中間チェックポイントと無制限リトライ、音量調節・ミュート・自動一時停止に対応します。
+
+ローカルサーバー8003で `python3 tests/sound-run-smoke.py`（全コースを実際の移動・ジャンプで踏破）、`python3 tests/sound-run-touch.py`（同時タッチ）、`python3 tests/sound-run-audio.py`（音声と消える床）を実行できます。Python Playwright / Chromiumが必要です。
