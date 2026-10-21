@@ -27,9 +27,10 @@ npm run dev
 npm run check
 npx playwright install chromium
 npm run test:e2e
-npm run build
 npm run preview
 ```
+
+ブラウザテストは `npm run check` で生成した本番ビルドを使用します。先にビルドしてください。
 
 既存のChromiumを使う場合：
 
