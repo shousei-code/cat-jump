@@ -69,7 +69,7 @@ function button(text, action, cls = "") {
   return `<button class="${cls}" data-action="${action}">${text}</button>`;
 }
 function scene(i, extra = "") {
-  return `<svg class="scene ${extra}" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${chapters[i].place}のミソラ"><image href="assets/scenes.png" x="${-(i % 3) * 512}" y="${-Math.floor(i / 3) * 512}" width="1536" height="1024"/></svg>`;
+  return `<svg class="scene ${extra}" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${chapters[i].place}のミソラ"><image href="assets/scenes.png?v=ofuda1" x="${-(i % 3) * 512}" y="${-Math.floor(i / 3) * 512}" width="1536" height="1024"/></svg>`;
 }
 function render() {
   stop();
