@@ -3,9 +3,9 @@ import {
   romanceView,
   playerAction,
   resetPlayerReply,
-} from "./player-ui.js?v=love1";
-import { schoolView, schoolAction, stopSchool } from "./school-ui.js?v=love1";
-import { chapters, fresh, reduce, parse, ending } from "./story.mjs?v=love1";
+} from "./player-ui.js?v=rin1";
+import { schoolView, schoolAction, stopSchool } from "./school-ui.js?v=rin1";
+import { chapters, fresh, reduce, parse, ending } from "./story.mjs?v=rin1";
 const key = "misora-school-v1",
   app = document.querySelector("#app");
 let state = fresh(),

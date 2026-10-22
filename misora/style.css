@@ -1019,3 +1019,5 @@ footer {
     min-height: 180px;
   }
 }
+
+.rin-preset{display:flex;align-items:center;gap:1rem;margin:1rem 0 1.5rem;padding:1rem;border:1px solid #ead4e5;border-radius:20px;background:linear-gradient(135deg,#fff5fa,#f0ebfc)}.rin-preset img{width:110px;height:180px;object-fit:contain;flex-shrink:0}.rin-preset h3{margin:0 0 .4rem}.rin-preset p{font-size:.88rem}.rin-preset a{color:#965a8a;font-size:.85rem}select:disabled{opacity:.8}@media(max-width:480px){.rin-preset{gap:.6rem;padding:.7rem}.rin-preset img{width:80px;height:145px}}

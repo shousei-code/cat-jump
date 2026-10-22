@@ -1,11 +1,11 @@
-import { playerFigure, escapeHtml } from "./player-art.js";
+import { playerFigure, escapeHtml } from "./player-art.js?v=rin1";
 import {
   outfits,
   friends,
   events,
   freshSchool,
   rivals,
-} from "./school.mjs?v=love1";
+} from "./school.mjs?v=rin1";
 let figureIndex = 0;
 let tab = "campus",
   active = null,

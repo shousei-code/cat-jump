@@ -1,4 +1,4 @@
-import { dressNames, pinNames, shoeNames, freshPlayer } from "./player.mjs";
+import { dressNames, pinNames, shoeNames, freshPlayer } from "./player.mjs?v=rin1";
 const bodies = [
   ["wardrobe-a", 0, 270, 35, 761],
   ["wardrobe-a", 1, 248, 35, 761],
@@ -32,12 +32,14 @@ const hairFilters = [
   "hue-rotate(28deg) saturate(.75) brightness(1.2)",
   "hue-rotate(320deg) saturate(.8)",
   "hue-rotate(270deg) saturate(.65)",
+  "hue-rotate(325deg) saturate(.45) brightness(1.55)",
 ];
 const eyeFilters = [
   "none",
   "hue-rotate(290deg)",
   "hue-rotate(150deg)",
   "hue-rotate(325deg)",
+  "saturate(.5) brightness(1.3)",
 ];
 const tint = [
   "none",
@@ -86,7 +88,7 @@ export function shoeIcon(i) {
 export function playerFigure(state, extra = "", expression = "smile") {
   const p = state.player ?? freshPlayer(),
     id = "player-" + counter++,
-    hair = hairs[p.hair],
+    hair = hairs[p.hair] ?? hairs[0],
     face = expression === "shy" ? 3 : expression === "joy" ? 1 : 0;
   const feetStart = p.dress === 10 && p.shoes % 6 !== 2 ? 700 : 629.76;
   const hs = sprite(
@@ -116,5 +118,6 @@ export function playerFigure(state, extra = "", expression = "smile") {
       83.3,
       filter,
     );
-  return `<svg class="player-figure ${extra}" viewBox="0 0 512 768" role="img" aria-label="${escapeHtml(p.name)}のコーディネート" data-dress="${p.dress}" data-hair="${p.hair}" data-pin="${p.pin}" data-shoes="${p.shoes}"><defs><clipPath id="${id}-body"><rect width="512" height="${feetStart}"/></clipPath><clipPath id="${id}-feet"><rect y="${feetStart}" width="512" height="${750 - feetStart}"/></clipPath><clipPath id="${id}-front"><rect x="0" y="0" width="512" height="${hair[3] + 512 * hair[1] * 0.6}"/></clipPath><clipPath id="${id}-skirt"><rect x="110" y="270" width="292" height="300"/></clipPath><clipPath id="${id}-eyes"><ellipse cx="237.7" cy="93" rx="8.5" ry="7"/><ellipse cx="275.2" cy="90.5" rx="8.5" ry="7"/></clipPath><clipPath id="${id}-all"><rect width="512" height="768"/></clipPath></defs><g clip-path="url(#${id}-all)">${hs}<g clip-path="url(#${id}-body)">${body(dressBases[p.dress])}</g>${p.dress >= 14 ? `<g clip-path="url(#${id}-skirt)">${body(dressBases[p.dress], `hue-rotate(${[310, 270, 30, 280, 20, 90][p.dress - 14]}deg)`)}</g>` : ""}<g clip-path="url(#${id}-feet)">${body([0, 1, 7, 2, 4, 8][p.shoes % 6], tint[Math.floor(p.shoes / 6)])}</g>${fs()}<g clip-path="url(#${id}-eyes)">${fs(eyeFilters[p.eyes])}</g><g clip-path="url(#${id}-front)">${hs}</g><svg x="282" y="35" width="44" height="37" viewBox="0 0 307.2 256" style="overflow:hidden"><image href="assets/player/hairpins.png" x="${-(p.pin % 5) * 307.2}" y="${-Math.floor(p.pin / 5) * 256}" width="1536" height="1024"/></svg></g></svg>`;
+  const rin = `<svg class="rin-head" x="176" y="-8" width="160" height="145" viewBox="0 0 512 464" preserveAspectRatio="none" style="overflow:hidden"><image href="assets/player/rin-heads.png" x="${-(expression === "shy" ? 2 : expression === "joy" ? 1 : 0) * 512}" y="0" width="1536" height="512"/></svg>`;
+  return `<svg class="player-figure ${extra}" viewBox="0 0 512 768" role="img" aria-label="${escapeHtml(p.name)}のコーディネート" data-dress="${p.dress}" data-hair="${p.hair}" data-pin="${p.pin}" data-shoes="${p.shoes}"><defs><clipPath id="${id}-body"><rect width="512" height="${feetStart}"/></clipPath><clipPath id="${id}-feet"><rect y="${feetStart}" width="512" height="${750 - feetStart}"/></clipPath><clipPath id="${id}-front"><rect x="0" y="0" width="512" height="${hair[3] + 512 * hair[1] * 0.6}"/></clipPath><clipPath id="${id}-skirt"><rect x="110" y="270" width="292" height="300"/></clipPath><clipPath id="${id}-eyes"><ellipse cx="237.7" cy="93" rx="8.5" ry="7"/><ellipse cx="275.2" cy="90.5" rx="8.5" ry="7"/></clipPath><clipPath id="${id}-all"><rect width="512" height="768"/></clipPath></defs><g clip-path="url(#${id}-all)">${p.hair === 6 ? "" : hs}<g clip-path="url(#${id}-body)">${body(dressBases[p.dress])}</g>${p.dress >= 14 ? `<g clip-path="url(#${id}-skirt)">${body(dressBases[p.dress], `hue-rotate(${[310, 270, 30, 280, 20, 90][p.dress - 14]}deg)`)}</g>` : ""}<g clip-path="url(#${id}-feet)">${body([0, 1, 7, 2, 4, 8][p.shoes % 6], tint[Math.floor(p.shoes / 6)])}</g>${p.hair === 6 ? rin : `${fs()}<g clip-path="url(#${id}-eyes)">${fs(eyeFilters[p.eyes])}</g><g clip-path="url(#${id}-front)">${hs}</g>`}<svg x="282" y="35" width="44" height="37" viewBox="0 0 307.2 256" style="overflow:hidden"><image href="assets/player/hairpins.png" x="${-(p.pin % 5) * 307.2}" y="${-Math.floor(p.pin / 5) * 256}" width="1536" height="1024"/></svg></g></svg>`;
 }

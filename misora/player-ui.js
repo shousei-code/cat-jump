@@ -6,20 +6,20 @@ import {
   colors,
   dates,
   freshPlayer,
-} from "./player.mjs";
+} from "./player.mjs?v=rin1";
 import {
   playerFigure,
   pinIcon,
   shoeIcon,
   escapeHtml as esc,
-} from "./player-art.js";
-import { figure } from "./school-ui.js?v=love1";
+} from "./player-art.js?v=rin1";
+import { figure } from "./school-ui.js?v=rin1";
 let category = "dress",
   dateReply = null;
 const names = { dress: dressNames, pin: pinNames, shoes: shoeNames };
 export function creatorView(state) {
   const p = state.player ?? freshPlayer();
-  return `<div class="chapter-head"><div><span class="eyebrow">MY OWN SCHOOL STORY</span><h1>自分をつくる・着せ替え</h1></div><button data-action="romance">ミソラくんに会いにいく</button></div><nav class="school-nav"><button data-action="school">学園生活へ</button><button data-action="play">元の物語へ</button></nav><div class="player-layout"><aside class="player-mirror">${playerFigure(state)}<h2>${esc(p.name)}</h2><p>${dressNames[p.dress]}<br>${pinNames[p.pin]}・${shoeNames[p.shoes]}</p></aside><section class="player-editor"><section class="profile-form"><h2>あなたのプロフィール</h2><label>ゲーム内のニックネーム<input id="player-name" maxlength="24" value="${esc(p.name)}" autocomplete="off"></label><button data-action="player-name">名前を決める</button><p class="hint">本名でなく、好きな名前で遊べます。このブラウザだけに保存します。</p><label>髪型<select data-player-slot="hair">${hairNames.map((x, i) => `<option value="${i}" ${p.hair === i ? "selected" : ""}>${x}</option>`).join("")}</select></label><label>髪色<select data-player-slot="color">${colors.map((x, i) => `<option value="${i}" ${p.color === i ? "selected" : ""}>${x}</option>`).join("")}</select></label><label>瞳の色<select data-player-slot="eyes">${["すみれ", "ミント", "はちみつ", "青空"].map((x, i) => `<option value="${i}" ${p.eyes === i ? "selected" : ""}>${x}</option>`).join("")}</select></label></section><h2>わたしのクローゼット</h2><p>服20種類・ヘアピン20種類・靴20種類。学園からのプレゼントで、全部すぐに選べます。</p><nav class="school-nav">${[
+  return `<div class="chapter-head"><div><span class="eyebrow">MY OWN SCHOOL STORY</span><h1>自分をつくる・着せ替え</h1></div><button data-action="romance">ミソラくんに会いにいく</button></div><nav class="school-nav"><button data-action="school">学園生活へ</button><button data-action="play">元の物語へ</button></nav><div class="player-layout"><aside class="player-mirror">${playerFigure(state)}<h2>${esc(p.name)}</h2><p>${dressNames[p.dress]}<br>${pinNames[p.pin]}・${shoeNames[p.shoes]}</p></aside><section class="player-editor"><section class="profile-form"><h2>あなたのプロフィール</h2><div class="rin-preset"><img src="assets/player/rin-portrait.png" alt="短いパステルピンクの髪と淡い紫の瞳のリンちゃん" width="1024" height="1536" loading="lazy"><div><h3>リンちゃん</h3><p>ふんわりショートボブ、パステルピンクの髪、淡い紫の瞳。</p><button data-action="player-rin">リンちゃんにする</button><p class="hint">服やピン、物語の続きはそのままです。</p><a href="assets/player/rin-portrait.png" target="_blank" rel="noopener">イラストを大きく見る</a></div></div><label>ゲーム内のニックネーム<input id="player-name" maxlength="24" value="${esc(p.name)}" autocomplete="off"></label><button data-action="player-name">名前を決める</button><p class="hint">本名でなく、好きな名前で遊べます。このブラウザだけに保存します。</p><label>髪型<select data-player-slot="hair">${hairNames.map((x, i) => `<option value="${i}" ${p.hair === i ? "selected" : ""}>${x}</option>`).join("")}</select></label><label>髪色<select data-player-slot="color" ${p.hair === 6 ? "disabled" : ""}>${colors.map((x, i) => `<option value="${i}" ${p.color === i ? "selected" : ""}>${x}</option>`).join("")}</select></label><label>瞳の色<select data-player-slot="eyes" ${p.hair === 6 ? "disabled" : ""}>${["すみれ", "ミント", "はちみつ", "青空", "パステルラベンダー"].map((x, i) => `<option value="${i}" ${p.eyes === i ? "selected" : ""}>${x}</option>`).join("")}</select></label>${p.hair === 6 ? '<p class="hint">リンちゃんのボブは専用のピンク髪・薄紫の瞳です。他の髪型では色も自由に選べます。</p>' : ""}</section><h2>わたしのクローゼット</h2><p>服20種類・ヘアピン20種類・靴20種類。学園からのプレゼントで、全部すぐに選べます。</p><nav class="school-nav">${[
     ["dress", "お洋服"],
     ["pin", "ヘアピン"],
     ["shoes", "靴"],
@@ -40,7 +40,9 @@ export function romanceView(state) {
 }
 export function playerAction(a, { state, act, render }) {
   const p = state.player ?? freshPlayer();
-  if (a === "player-name") {
+  if (a === "player-rin") {
+    act({ type: "player-rin" });
+  } else if (a === "player-name") {
     const input = document.querySelector("#player-name");
     if (!input.value.trim()) {
       input.setCustomValidity("好きなニックネームを入れてね");

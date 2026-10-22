@@ -71,6 +71,7 @@ export const hairNames = [
   "サイドアレンジ",
   "おだんご",
   "軽やかショート",
+  "リンちゃんのショートボブ",
 ];
 export const colors = [
   "ピンクブラウン",
@@ -78,12 +79,13 @@ export const colors = [
   "はちみつ",
   "ローズ",
   "ラベンダー",
+  "パステルピンク",
 ];
 export const freshPlayer = () => ({
-  name: "こっちゃん",
-  hair: 2,
-  color: 0,
-  eyes: 0,
+  name: "リンちゃん",
+  hair: 6,
+  color: 5,
+  eyes: 4,
   dress: 0,
   pin: 0,
   shoes: 0,
@@ -111,9 +113,9 @@ export function validPlayer(p) {
       "chapter",
       "rival",
     ].every((k) => Number.isInteger(p[k]) && p[k] >= 0) &&
-    p.hair < 6 &&
-    p.color < 5 &&
-    p.eyes < 4 &&
+    p.hair < 7 &&
+    p.color < 6 &&
+    p.eyes < 5 &&
     p.dress < 20 &&
     p.pin < 20 &&
     p.shoes < 20 &&
@@ -229,15 +231,17 @@ export function playerReduce(s, a) {
   const n = structuredClone(s);
   n.player ??= freshPlayer();
   const p = n.player;
-  if (a.type === "player-name") {
+  if (a.type === "player-rin") {
+    Object.assign(p, { name: "リンちゃん", hair: 6, color: 5, eyes: 4 });
+  } else if (a.type === "player-name") {
     const name = String(a.name ?? "").trim();
     if (!name || name.length > 24 || /[\u0000-\u001f]/.test(name)) return s;
     p.name = name;
   } else if (a.type === "player-equip") {
     const limits = {
-      hair: 6,
-      color: 5,
-      eyes: 4,
+      hair: 7,
+      color: 6,
+      eyes: 5,
       dress: 20,
       pin: 20,
       shoes: 20,
@@ -249,7 +253,9 @@ export function playerReduce(s, a) {
       a.index >= limits[a.slot]
     )
       return s;
+    if (p.hair === 6 && ["color", "eyes"].includes(a.slot)) return s;
     p[a.slot] = a.index;
+    if (a.slot === "hair" && a.index === 6) { p.color = 5; p.eyes = 4; }
   } else if (a.type === "player-choice") {
     if (p.chapter >= dates.length || ![0, 1].includes(a.index)) return s;
     const d = dates[p.chapter];
