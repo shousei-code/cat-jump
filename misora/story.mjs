@@ -1,10 +1,10 @@
-import { freshPlayer, validPlayer, playerReduce } from "./player.mjs?v=rin1";
+import { freshPlayer, validPlayer, playerReduce } from "./player.mjs?v=ears1";
 import {
   freshSchool,
   schoolReduce,
   validSchool,
   normalizeSchool,
-} from "./school.mjs?v=rin1";
+} from "./school.mjs?v=ears1";
 export const chapters = [
   {
     title: "桜の下で、はじめまして",

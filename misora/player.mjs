@@ -41,6 +41,12 @@ export const pinNames = [
   "虹の貝がら",
   "ぶどう",
   "宝石の王冠",
+  "パールカチューシャ",
+  "大きなピンクリボン",
+  "ふわふわ白猫耳",
+  "メイドカチューシャ",
+  "星のラベンダーリボン",
+  "リボンつき黒猫耳",
 ];
 export const shoeNames = [
   "学園ローファー",
@@ -117,7 +123,7 @@ export function validPlayer(p) {
     p.color < 6 &&
     p.eyes < 5 &&
     p.dress < 20 &&
-    p.pin < 20 &&
+    p.pin < pinNames.length &&
     p.shoes < 20 &&
     p.heart <= 16 &&
     p.chapter <= 8 &&
@@ -243,7 +249,7 @@ export function playerReduce(s, a) {
       color: 6,
       eyes: 5,
       dress: 20,
-      pin: 20,
+      pin: pinNames.length,
       shoes: 20,
     };
     if (

@@ -20,7 +20,7 @@ with sync_playwright() as p:
   expect(page.locator('.player-items button')).to_have_count(20)
   page.locator('[data-action="player-equip-dress-10"]').click()
   for slot,index in [('pin',5),('shoes',3)]:
-   page.locator(f'[data-action="player-tab-{slot}"]').click();expect(page.locator('.player-items button')).to_have_count(20);page.locator(f'[data-action="player-equip-{slot}-{index}"]').click()
+   page.locator(f'[data-action="player-tab-{slot}"]').click();expect(page.locator('.player-items button')).to_have_count(26 if slot=="pin" else 20);page.locator(f'[data-action="player-equip-{slot}-{index}"]').click()
   avatar=page.locator('.player-mirror .player-figure');expect(avatar).to_have_attribute('data-dress','10');expect(avatar).to_have_attribute('data-pin','5');expect(avatar).to_have_attribute('data-shoes','3')
   page.evaluate('async()=>{await Promise.all([...document.querySelectorAll("svg image")].map(e=>{const i=new Image();i.src=e.getAttribute("href");return i.decode();}));}')
   page.screenshot(path=f'/tmp/misora-player-{width}.png',full_page=True,animations='disabled')

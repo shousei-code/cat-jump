@@ -1,4 +1,4 @@
-import { dressNames, pinNames, shoeNames, freshPlayer } from "./player.mjs?v=rin1";
+import { dressNames, pinNames, shoeNames, freshPlayer } from "./player.mjs?v=ears1";
 const bodies = [
   ["wardrobe-a", 0, 270, 35, 761],
   ["wardrobe-a", 1, 248, 35, 761],
@@ -77,7 +77,11 @@ function body(i, filter = "none") {
     filter,
   );
 }
+function headwear(i, x, y, w, h) {
+  return `<svg class="headwear" data-headwear="${i}" x="${x}" y="${y}" width="${w}" height="${h}" viewBox="0 0 512 512" style="overflow:hidden"><image href="assets/player/headwear.png" x="${-(i % 3) * 512}" y="${-Math.floor(i / 3) * 512}" width="1536" height="1024"/></svg>`;
+}
 export function pinIcon(i, klass = "") {
+  if (i >= 20) return `<svg class="pin-icon ${klass}" viewBox="0 0 512 512">${headwear(i - 20, 0, 0, 512, 512)}</svg>`;
   const cw = 307.2,
     ch = 256;
   return `<svg class="pin-icon ${klass}" viewBox="0 0 ${cw} ${ch}" preserveAspectRatio="xMidYMid meet" style="overflow:hidden"><svg width="${cw}" height="${ch}" style="overflow:hidden"><image href="assets/player/hairpins.png" x="${-(i % 5) * cw}" y="${-Math.floor(i / 5) * ch}" width="1536" height="1024"/></svg></svg>`;
@@ -119,5 +123,7 @@ export function playerFigure(state, extra = "", expression = "smile") {
       filter,
     );
   const rin = `<svg class="rin-head" x="176" y="-8" width="160" height="145" viewBox="0 0 512 464" preserveAspectRatio="none" style="overflow:hidden"><image href="assets/player/rin-heads.png" x="${-(expression === "shy" ? 2 : expression === "joy" ? 1 : 0) * 512}" y="0" width="1536" height="512"/></svg>`;
-  return `<svg class="player-figure ${extra}" viewBox="0 0 512 768" role="img" aria-label="${escapeHtml(p.name)}のコーディネート" data-dress="${p.dress}" data-hair="${p.hair}" data-pin="${p.pin}" data-shoes="${p.shoes}"><defs><clipPath id="${id}-body"><rect width="512" height="${feetStart}"/></clipPath><clipPath id="${id}-feet"><rect y="${feetStart}" width="512" height="${750 - feetStart}"/></clipPath><clipPath id="${id}-front"><rect x="0" y="0" width="512" height="${hair[3] + 512 * hair[1] * 0.6}"/></clipPath><clipPath id="${id}-skirt"><rect x="110" y="270" width="292" height="300"/></clipPath><clipPath id="${id}-eyes"><ellipse cx="237.7" cy="93" rx="8.5" ry="7"/><ellipse cx="275.2" cy="90.5" rx="8.5" ry="7"/></clipPath><clipPath id="${id}-all"><rect width="512" height="768"/></clipPath></defs><g clip-path="url(#${id}-all)">${p.hair === 6 ? "" : hs}<g clip-path="url(#${id}-body)">${body(dressBases[p.dress])}</g>${p.dress >= 14 ? `<g clip-path="url(#${id}-skirt)">${body(dressBases[p.dress], `hue-rotate(${[310, 270, 30, 280, 20, 90][p.dress - 14]}deg)`)}</g>` : ""}<g clip-path="url(#${id}-feet)">${body([0, 1, 7, 2, 4, 8][p.shoes % 6], tint[Math.floor(p.shoes / 6)])}</g>${p.hair === 6 ? rin : `${fs()}<g clip-path="url(#${id}-eyes)">${fs(eyeFilters[p.eyes])}</g><g clip-path="url(#${id}-front)">${hs}</g>`}<svg x="282" y="35" width="44" height="37" viewBox="0 0 307.2 256" style="overflow:hidden"><image href="assets/player/hairpins.png" x="${-(p.pin % 5) * 307.2}" y="${-Math.floor(p.pin / 5) * 256}" width="1536" height="1024"/></svg></g></svg>`;
+  const bow = [21, 24].includes(p.pin);
+  const accessory = p.pin >= 20 ? headwear(p.pin - 20, bow ? 250 : 166, bow ? -26 : -65, bow ? 100 : 180, bow ? 100 : 180) : `<svg x="282" y="35" width="44" height="37" viewBox="0 0 307.2 256" style="overflow:hidden"><image href="assets/player/hairpins.png" x="${-(p.pin % 5) * 307.2}" y="${-Math.floor(p.pin / 5) * 256}" width="1536" height="1024"/></svg>`;
+  return `<svg class="player-figure ${extra}" viewBox="0 -50 512 818" role="img" aria-label="${escapeHtml(p.name)}のコーディネート" data-dress="${p.dress}" data-hair="${p.hair}" data-pin="${p.pin}" data-shoes="${p.shoes}"><defs><clipPath id="${id}-body"><rect width="512" height="${feetStart}"/></clipPath><clipPath id="${id}-feet"><rect y="${feetStart}" width="512" height="${750 - feetStart}"/></clipPath><clipPath id="${id}-front"><rect x="0" y="0" width="512" height="${hair[3] + 512 * hair[1] * 0.6}"/></clipPath><clipPath id="${id}-skirt"><rect x="110" y="270" width="292" height="300"/></clipPath><clipPath id="${id}-eyes"><ellipse cx="237.7" cy="93" rx="8.5" ry="7"/><ellipse cx="275.2" cy="90.5" rx="8.5" ry="7"/></clipPath><clipPath id="${id}-all"><rect y="-50" width="512" height="818"/></clipPath></defs><g clip-path="url(#${id}-all)">${p.hair === 6 ? "" : hs}<g clip-path="url(#${id}-body)">${body(dressBases[p.dress])}</g>${p.dress >= 14 ? `<g clip-path="url(#${id}-skirt)">${body(dressBases[p.dress], `hue-rotate(${[310, 270, 30, 280, 20, 90][p.dress - 14]}deg)`)}</g>` : ""}<g clip-path="url(#${id}-feet)">${body([0, 1, 7, 2, 4, 8][p.shoes % 6], tint[Math.floor(p.shoes / 6)])}</g>${p.hair === 6 ? rin : `${fs()}<g clip-path="url(#${id}-eyes)">${fs(eyeFilters[p.eyes])}</g><g clip-path="url(#${id}-front)">${hs}</g>`}${accessory}</g></svg>`;
 }

@@ -19,6 +19,12 @@ with sync_playwright() as p:
   expect(page.locator('.player-mirror .rin-head')).to_be_visible()
   expect(page.locator('[data-player-slot="color"]')).to_be_disabled()
   page.locator('[data-action="player-equip-dress-10"]').click()
+  page.locator('[data-action="player-tab-pin"]').click()
+  expect(page.locator('.player-items button')).to_have_count(26)
+  for i in range(20,26):
+   page.locator(f'[data-action="player-equip-pin-{i}"]').click()
+   expect(page.locator('.player-mirror .headwear')).to_have_attribute('data-headwear',str(i-20))
+  page.locator('.player-mirror').screenshot(path=f'/tmp/ears-{width}.png')
   page.get_by_role('button',name='ミソラくんに会いにいく').click()
   expect(page.locator('.event-dialogue')).to_contain_text('リンちゃん')
   page.locator('[data-action="player-choice-0"]').click();page.locator('[data-action="player-reply"]').click()
@@ -31,7 +37,7 @@ with sync_playwright() as p:
   page.reload();page.get_by_role('button',name='自分をつくる・恋の物語',exact=True).click()
   expect(page.locator('.player-mirror .player-figure')).to_have_attribute('data-dress','10')
   expect(page.locator('.player-mirror .rin-head')).to_be_visible()
-  s=page.evaluate('JSON.parse(localStorage.getItem("misora-school-v1"))');assert s['player']['chapter']==1 and s['player']['name']=='リンちゃん'
+  s=page.evaluate('JSON.parse(localStorage.getItem("misora-school-v1"))');assert s['player']['chapter']==1 and s['player']['name']=='リンちゃん' and s['player']['pin']==25
   page.evaluate('async()=>{await Promise.all([...document.querySelectorAll("svg image")].map(e=>{const i=new Image();i.src=e.getAttribute("href");return i.decode();}));}')
   page.screenshot(path=f'/tmp/rin-{width}.png',full_page=True,animations='disabled')
   assert page.evaluate('document.documentElement.scrollWidth<=innerWidth');assert not errors,errors
