@@ -1,0 +1,418 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: ui-rounded, "Hiragino Kaku Gothic ProN", sans-serif;
+  color: #65506c;
+  background: #f8eef5;
+}
+button,
+a,
+input {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  border: 1px solid #e6ccdf;
+  border-radius: 15px;
+  padding: 12px 16px;
+  background: #fffafc;
+  color: #765b7f;
+  font-weight: 700;
+  min-height: 44px;
+}
+button:hover {
+  background: #f4e4f6;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #b47cc2;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+#world {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 25px;
+  background: #fffcf8e8;
+  border-bottom: 1px solid #ead8e8;
+}
+header a {
+  font-size: 12px;
+  color: #9e849e;
+  text-decoration: none;
+}
+header strong {
+  font-size: 20px;
+}
+small {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: #ad8ca7;
+  margin-top: 4px;
+}
+#coins {
+  background: #fff0c9;
+  padding: 10px 20px;
+  border-radius: 24px;
+}
+#menu {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px;
+}
+#guide {
+  position: absolute;
+  top: 160px;
+  left: 20px;
+  max-width: 300px;
+  padding: 16px;
+  border-radius: 20px;
+  background: #fffaf0df;
+  font-size: 12px;
+  line-height: 1.8;
+}
+#guide b {
+  font-size: 17px;
+}
+#guide button {
+  font-size: 11px;
+  margin-top: 10px;
+}
+#progress {
+  display: block;
+}
+#toast {
+  position: fixed;
+  bottom: 170px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fffaf5ed;
+  border: 1px solid #e2ccdd;
+  border-radius: 20px;
+  padding: 12px 22px;
+  text-align: center;
+  pointer-events: none;
+  max-width: 90%;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 3;
+}
+#toast.show {
+  opacity: 1;
+}
+#touch {
+  position: fixed;
+  bottom: 25px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  pointer-events: none;
+}
+#touch button {
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  background: #fffbf5d9;
+  min-width: 52px;
+}
+#touch .pad {
+  text-align: center;
+}
+#jump {
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  background: #eacaf0dd !important;
+}
+dialog {
+  width: min(920px, 94vw);
+  max-height: 86dvh;
+  border: 1px solid #e7d5e4;
+  border-radius: 28px;
+  padding: 28px;
+  background: #fffaf7;
+  color: #65506c;
+  box-shadow: 0 20px 80px #7c5e8c44;
+}
+dialog::backdrop {
+  background: #64507366;
+  backdrop-filter: blur(5px);
+}
+#close {
+  float: right;
+  font-size: 23px;
+  border: 0;
+  padding: 0;
+  width: 44px;
+}
+h1 {
+  font-size: 27px;
+  margin: 12px 0;
+}
+h2 {
+  font-size: 20px;
+}
+p {
+  line-height: 1.8;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #ac84a6;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 14px 0;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.tile {
+  padding: 12px;
+  border: 1px solid #e7d6e5;
+  border-radius: 20px;
+  background: #fffefd;
+  text-align: center;
+}
+.sticker {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  background-image: url("stickers.png");
+  background-size: 600% 400%;
+  border-radius: 20%;
+  mix-blend-mode: multiply;
+}
+.tile small {
+  letter-spacing: 0;
+  font-size: 11px;
+}
+.tile.locked .sticker {
+  filter: grayscale(1);
+  opacity: 0.25;
+}
+.tile.selected,
+button[aria-pressed="true"] {
+  outline: 3px solid #c494c3;
+}
+.book-page {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 22px;
+  border-radius: 20px;
+  background: var(--paper, #f5dce8);
+  box-shadow: inset 12px 0 #ffffff60;
+}
+.book-page button {
+  aspect-ratio: 1;
+  padding: 6px;
+  border: 1px dashed #bca5bb;
+  background: #fff9;
+}
+.book-page .sticker {
+  height: 100%;
+}
+.note {
+  font-size: 12px;
+  color: #9b8298;
+}
+.result {
+  max-width: 230px;
+  margin: auto;
+  text-align: center;
+}
+.machine {
+  background: linear-gradient(#fbdfec, #f6edf9);
+  border-radius: 30px;
+  padding: 16px;
+}
+.machine .globe {
+  border: 5px solid #fff;
+  border-radius: 50%;
+  padding: 12px;
+  background: #fff8;
+  margin: 8px auto;
+  max-width: 130px;
+  font-size: 44px;
+}
+.machine button {
+  width: 100%;
+}
+.work-order {
+  font-size: 40px;
+  padding: 24px;
+  border-radius: 24px;
+  background: #f3e7f5;
+  text-align: center;
+}
+.avatar-swatch {
+  font-size: 40px;
+  display: block;
+}
+.welcome {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 24px;
+  align-items: center;
+}
+.welcome-art {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  transform: rotate(-4deg);
+  background: #f8e4f0;
+  border-radius: 30px;
+  padding: 12px;
+}
+#roomBadge {
+  position: absolute;
+  right: 20px;
+  top: 158px;
+  background: #fff9e8;
+  padding: 12px;
+  border-radius: 15px;
+  font-size: 12px;
+}
+input {
+  padding: 12px;
+  border: 1px solid #c9acc9;
+  border-radius: 12px;
+  max-width: 100%;
+  width: 180px;
+}
+#error {
+  position: relative;
+  margin: 40px;
+  padding: 20px;
+  background: white;
+  border-radius: 20px;
+}
+[hidden] {
+  display: none !important;
+}
+@media (max-width: 650px) {
+  header {
+    padding: 12px;
+  }
+  header strong {
+    font-size: 14px;
+  }
+  header a {
+    font-size: 10px;
+  }
+  #coins {
+    padding: 9px;
+    font-size: 13px;
+  }
+  #menu {
+    gap: 5px;
+    margin: 8px;
+  }
+  #menu button {
+    font-size: 11px;
+    padding: 9px;
+    min-height: 40px;
+  }
+  #guide {
+    top: 146px;
+    left: 10px;
+    padding: 10px;
+    max-width: 225px;
+    font-size: 10px;
+  }
+  #guide p {
+    display: none;
+  }
+  #guide b {
+    font-size: 13px;
+  }
+  #guide button {
+    padding: 6px;
+    min-height: 32px;
+  }
+  dialog {
+    padding: 18px;
+  }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .welcome {
+    grid-template-columns: 1fr;
+  }
+  .welcome-art {
+    display: none;
+  }
+  .book-page {
+    padding: 12px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .book-page button {
+    min-width: 0;
+  }
+  #roomBadge {
+    top: auto;
+    bottom: 145px;
+    right: 10px;
+  }
+  #touch {
+    bottom: 16px;
+    left: 12px;
+    right: 12px;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  #toast {
+    bottom: 160px;
+    width: 85%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+.book-page {
+  max-width: 580px;
+  margin: auto;
+}
+.book-page button {
+  max-height: 130px;
+}
+#jump {
+  padding: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+#close {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fffaf7;
+  box-shadow: 0 2px 8px #b49bb522;
+}

@@ -1,0 +1,13 @@
+{
+  "name": "sticker-island-checks",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "signal": "node tests/signal.cjs"
+  },
+  "devDependencies": {
+    "peer": "1.0.2"
+  }
+}
