@@ -48,6 +48,34 @@ export const outfits = [
     desc: "紺のコートとピンクのマフラーでぽかぽか。",
   },
 ];
+
+const extraOutfits = [
+  "青空の夏制服",
+  "ワイン色のカーディガン",
+  "白い部活ジャケット",
+  "文化祭の王子さま",
+  "カフェのベスト",
+  "夏祭りの浴衣",
+  "雨の日のコート",
+  "森色のセーター",
+  "文化祭ステージスーツ",
+  "冬のダッフルコート",
+  "図書室のベスト",
+  "カピバラシェフ",
+  "しましまパーカー",
+  "白いコンサートスーツ",
+];
+extraOutfits.forEach((name, i) =>
+  outfits.push({
+    id: "extra-" + i,
+    name,
+    price: 0,
+    frame: i < 9 ? i : i - 9,
+    sheet: i < 9 ? "boys-extra-a" : "boys-extra-b",
+    tag: "入学のお祝い",
+    desc: "新しい学園生活を楽しむ、ミソラの特別な一着。",
+  }),
+);
 export const friends = [
   {
     id: "haru",
@@ -66,6 +94,53 @@ export const friends = [
     reply: "ありがとう！ みんなの好きなものが集まるお店にしよう。",
   },
 ];
+
+friends.push(
+  {
+    id: "ren",
+    name: "レン",
+    frame: 5,
+    sheet: "boys-extra-b",
+    role: "図書委員・静かな男の子",
+    line: "調べものなら一緒に探そう。きみの好きな本も教えて。",
+    reply: "一緒に考えると、新しい発見があるね。",
+  },
+  {
+    id: "souta",
+    name: "ソウタ",
+    frame: 6,
+    sheet: "boys-extra-b",
+    role: "軽音部・音楽好きの男の子",
+    line: "文化祭で演奏するんだ。どんな曲が好き？",
+    reply: "ありがとう！ 次の曲は、きみが楽しめる曲にするよ。",
+  },
+  {
+    id: "mio",
+    name: "ミオ",
+    frame: 7,
+    sheet: "boys-extra-b",
+    role: "おしゃれが大好きな女の子",
+    line: "髪のピン、かわいいね！ 一緒にお店を見に行こう。",
+    reply: "自分が好きだと思う服を選ぶのが、いちばん素敵だよ！",
+  },
+);
+export const rivals = [
+  {
+    id: "rina",
+    name: "リナ",
+    frame: 8,
+    sheet: "boys-extra-b",
+    role: "文化祭のライバル・本当は優しい女の子",
+    line: "私もミソラくんが気になるの。お互いの気持ちを大切に、文化祭を成功させましょう。",
+  },
+];
+export function normalizeSchool(w) {
+  if (w?.relations && typeof w.relations === "object") {
+    for (const id of ["ren", "souta", "mio"])
+      if (w.relations[id] === undefined) w.relations[id] = 0;
+  }
+  return w;
+}
 export const events = [
   {
     id: "club",
@@ -102,7 +177,7 @@ export const freshSchool = () => ({
   coins: 120,
   owned: ["uniform", "hoodie"],
   equipped: "uniform",
-  relations: { haru: 0, yui: 0 },
+  relations: { haru: 0, yui: 0, ren: 0, souta: 0, mio: 0 },
   completed: [],
   greeted: [],
   styled: [],
@@ -110,7 +185,7 @@ export const freshSchool = () => ({
 export function schoolReduce(state, a) {
   const s = structuredClone(state);
   s.school ??= freshSchool();
-  const w = s.school;
+  const w = normalizeSchool(s.school);
   if (a.type === "school-buy") {
     const o = outfits.find((x) => x.id === a.id);
     if (!o) return state;
@@ -149,7 +224,7 @@ export function validSchool(w) {
     w.coins >= 0 &&
     w.coins <= 1000 &&
     Array.isArray(w.owned) &&
-    w.owned.length <= 6 &&
+    w.owned.length <= 20 &&
     new Set(w.owned).size === w.owned.length &&
     w.owned.every((x) => outfits.some((o) => o.id === x)) &&
     w.owned.includes(w.equipped) &&
@@ -163,7 +238,7 @@ export function validSchool(w) {
     ["completed", "styled", "greeted"].every(
       (k) =>
         Array.isArray(w[k]) &&
-        w[k].length <= (k === "greeted" ? 2 : 3) &&
+        w[k].length <= (k === "greeted" ? 5 : 3) &&
         new Set(w[k]).size === w[k].length &&
         w[k].every((id) =>
           (k === "greeted" ? friends : events).some((x) => x.id === id),

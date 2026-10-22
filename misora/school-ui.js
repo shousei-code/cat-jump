@@ -1,4 +1,11 @@
-import { outfits, friends, events, freshSchool } from "./school.mjs";
+import { playerFigure, escapeHtml } from "./player-art.js";
+import {
+  outfits,
+  friends,
+  events,
+  freshSchool,
+  rivals,
+} from "./school.mjs?v=love1";
 let figureIndex = 0;
 let tab = "campus",
   active = null,
@@ -12,22 +19,28 @@ export function stopSchool() {
 }
 export function figure(id, extra = "") {
   const item =
-      outfits.find((x) => x.id === id) || friends.find((x) => x.id === id),
+      outfits.find((x) => x.id === id) ||
+      friends.find((x) => x.id === id) ||
+      rivals.find((x) => x.id === id),
     i = item.frame;
   const clip = "outfit-frame-" + figureIndex++;
-  return `<svg class="wardrobe-figure ${extra}" viewBox="0 0 384 512" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${item.name}" data-costume="${id}"><defs><clipPath id="${clip}"><rect width="384" height="512"/></clipPath></defs><g clip-path="url(#${clip})"><image href="assets/wardrobe.png?v=1" x="${(-i % 4) * 384}" y="${-Math.floor(i / 4) * 512}" width="1536" height="1024"/></g></svg>`;
+  const cols = item.sheet ? 3 : 4,
+    cw = item.sheet ? 512 : 384,
+    ch = 512,
+    sheet = item.sheet ?? "wardrobe";
+  return `<svg class="wardrobe-figure ${extra}" viewBox="0 0 ${cw} ${ch}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${item.name}" data-costume="${id}"><defs><clipPath id="${clip}"><rect width="${cw}" height="${ch}"/></clipPath></defs><g clip-path="url(#${clip})"><image href="assets/${sheet}.png?v=1" x="${-(i % cols) * cw}" y="${-Math.floor(i / cols) * ch}" width="1536" height="${item.sheet ? 1536 : 1024}"/></g></svg>`;
 }
 const btn = (text, a, disabled = false) =>
   `<button data-action="school-${a}" ${disabled ? "disabled" : ""}>${text}</button>`;
 export function schoolView(state) {
   const w = state.school ?? freshSchool(),
     outfit = outfits.find((x) => x.id === w.equipped);
-  return `<div class="chapter-head"><div><span class="eyebrow">MISORA'S SCHOOL DAYS</span><h1>ミソラのわくわく学園生活</h1></div><span class="coin-count">✧ ${w.coins} コイン</span></div><nav class="school-nav" aria-label="学園生活の場所">${btn("学園におでかけ", "tab-campus")}${btn("洋服屋さん", "tab-shop")}${btn("友だち", "tab-friends")}<button data-action="play">物語へ戻る</button></nav>${tab === "shop" ? `<div class="shop-layout"><aside class="dressing-mirror">${figure(w.equipped)}<h2>${outfit.name}</h2><p>いま着ている服</p></aside><section><span class="eyebrow">CAPY CLOSET</span><h2>洋服屋さん「カピ・クローゼット」</h2><p>ミソラに似合う服を見つけよう。買った服は何度でも着替えられます。</p><div class="clothes-grid">${outfits.map((o) => `<article>${figure(o.id, "mini")}<span class="tag">${o.tag}</span><h3>${o.name}</h3><p>${o.desc}</p>${btn(w.owned.includes(o.id) ? (w.equipped === o.id ? "着用中" : "この服に着替える") : o.price + " コインで買って着る", "buy-" + o.id, !w.owned.includes(o.id) && w.coins < o.price)}</article>`).join("")}</div><p class="hint">足りないコインは学園のイベントや、友だちへの初めての挨拶で集めよう。現実のお金は使いません。</p></section></div>` : tab === "friends" ? `<p>部活や行事で、少しずつ仲良くなろう。初めての挨拶で20コイン。</p><div class="friend-list">${friends.map((f) => `<article>${figure(f.id)}<h2>${f.name}</h2><p>${f.role}</p><span>♡ 仲良し ${w.relations[f.id]} / 10</span><p>「${f.line}」</p>${btn("一緒に遊ぼうと話す", "greet-" + f.id)}</article>`).join("")}</div>${reply ? `<div class="friend-reply" role="status">${reply}</div>` : ""}` : active ? eventView(w) : `<section class="school-welcome"><div>${figure(w.equipped)}</div><div><span class="eyebrow">今日も、好きなことから。</span><h2>「今日はどこに行こう？」</h2><p>部活で作品を作ったり、運動会でバトンをつないだり。ミソラと友だちの学園生活を楽しもう！</p><p>現在の服：${outfit.name}</p>${btn("おでかけの服を選ぶ", "tab-shop")}<p class="hint">着せ替えはこの学園生活の立ち絵に反映されます。物語の6枚のイベントイラストは、それぞれの場面の衣装です。</p></div></section><div class="event-grid">${events.map((e) => `<article><span class="eyebrow">${e.place}</span><h2>${e.name}</h2><p>${e.intro}</p><p>${w.completed.includes(e.id) ? "✦ クリア済み" : "◇ 初クリアで80コイン"} ${w.styled.includes(e.id) ? "· おしゃれスター獲得" : ""}</p>${btn("みんなと参加する", "event-" + e.id)}</article>`).join("")}</div><section class="school-awards"><h2>学園の思い出</h2><p>イベント ${w.completed.length}/3 · おしゃれスター ${w.styled.length}/3 · お洋服 ${w.owned.length}/6</p>${w.completed.length === 3 ? "<p>🏅 みんなで楽しんだ学園マスター！ 次は服を合わせておしゃれスターも集めよう。</p>" : ""}</section>`}`;
+  return `<div class="chapter-head"><div><span class="eyebrow">MISORA'S SCHOOL DAYS</span><h1>ミソラのわくわく学園生活</h1></div><span class="coin-count">✧ ${w.coins} コイン</span></div><nav class="school-nav" aria-label="学園生活の場所"><button data-action="player">自分の着せ替え</button><button data-action="romance">ミソラとの恋</button>${btn("学園におでかけ", "tab-campus")}${btn("洋服屋さん", "tab-shop")}${btn("友だち", "tab-friends")}<button data-action="play">物語へ戻る</button></nav>${tab === "shop" ? `<div class="shop-layout"><aside class="dressing-mirror">${figure(w.equipped)}<h2>${outfit.name}</h2><p>いま着ている服</p></aside><section><span class="eyebrow">CAPY CLOSET</span><h2>洋服屋さん「カピ・クローゼット」</h2><p>ミソラに似合う服を見つけよう。買った服は何度でも着替えられます。</p><div class="clothes-grid">${outfits.map((o) => `<article>${figure(o.id, "mini")}<span class="tag">${o.tag}</span><h3>${o.name}</h3><p>${o.desc}</p>${btn(w.owned.includes(o.id) ? (w.equipped === o.id ? "着用中" : "この服に着替える") : o.price + " コインで買って着る", "buy-" + o.id, !w.owned.includes(o.id) && w.coins < o.price)}</article>`).join("")}</div><p class="hint">足りないコインは学園のイベントや、友だちへの初めての挨拶で集めよう。現実のお金は使いません。</p></section></div>` : tab === "friends" ? `<p>部活や行事で、少しずつ仲良くなろう。初めての挨拶で20コイン。</p><div class="friend-list">${friends.map((f) => `<article>${figure(f.id)}<h2>${f.name}</h2><p>${f.role}</p><span>♡ 仲良し ${w.relations[f.id]} / 10</span><p>「${f.line}」</p>${btn("一緒に遊ぼうと話す", "greet-" + f.id)}</article>`).join("")}</div><article class="rival-card">${figure("rina")}<div><h2>ライバル・リナ</h2><p>${rivals[0].line}</p><button data-action="romance">恋の物語でリナと話す</button></div></article>${reply ? `<div class="friend-reply" role="status">${reply}</div>` : ""}` : active ? eventView(w, state) : `<section class="school-welcome"><div>${figure(w.equipped)}</div><div><span class="eyebrow">今日も、好きなことから。</span><h2>「今日はどこに行こう？」</h2><p>部活で作品を作ったり、運動会でバトンをつないだり。ミソラと友だちの学園生活を楽しもう！</p><p>現在の服：${outfit.name}</p>${btn("おでかけの服を選ぶ", "tab-shop")}<p class="hint">着せ替えはこの学園生活の立ち絵に反映されます。物語の6枚のイベントイラストは、それぞれの場面の衣装です。</p></div></section><div class="event-grid">${events.map((e) => `<article><span class="eyebrow">${e.place}</span><h2>${e.name}</h2><p>${e.intro}</p><p>${w.completed.includes(e.id) ? "✦ クリア済み" : "◇ 初クリアで80コイン"} ${w.styled.includes(e.id) ? "· おしゃれスター獲得" : ""}</p>${btn("みんなと参加する", "event-" + e.id)}</article>`).join("")}</div><section class="school-awards"><h2>学園の思い出</h2><p>イベント ${w.completed.length}/3 · おしゃれスター ${w.styled.length}/3 · お洋服 ${w.owned.length}/20</p>${w.completed.length === 3 ? "<p>🏅 みんなで楽しんだ学園マスター！ 次は服を合わせておしゃれスターも集めよう。</p>" : ""}</section>`}`;
 }
-function eventView(w) {
+function eventView(w, state) {
   const e = events.find((x) => x.id === active),
     f = friends.find((x) => x.id === e.buddy);
-  return `${btn("学園に戻る", "tab-campus")}<section class="school-event ${e.id}"><div class="event-cast">${figure(w.equipped)}${figure(f.id)}</div><div class="event-dialogue"><span>${f.name}とミソラ</span><h2>${e.name}</h2><p>${result === "win" ? e.reply : e.intro}</p><p class="hint">おすすめ：${outfits.find((x) => x.id === e.outfit).name}。合わせてクリアすると初回おしゃれボーナス20コイン。</p></div></section><section id="school-challenge" class="action-area">${result === "win" ? `<h2>✧ みんなでクリア！</h2><p>初クリアなら80コイン。おすすめの服を着て初めて成功した場合は、おしゃれスターと20コインも自動で受け取れます。受け取り済みの報酬は増えません。</p>${btn("もう一度遊ぶ", "event-" + e.id)}${btn("洋服屋さんに行く", "tab-shop")}` : result === "fail" ? `<h2>大丈夫、もう一度やってみよう！</h2><p>コインも服も減りません。みんなが応援しているよ。</p>${btn("再挑戦する", "event-" + e.id)}` : `<p>準備ができたら始めよう。途中で離れると挑戦の最初から再開します。</p>${btn("イベント開始", "start")}`}</section>`;
+  return `${btn("学園に戻る", "tab-campus")}<section class="school-event ${e.id}"><div class="event-cast with-player">${playerFigure(state)}${figure(w.equipped)}${figure(f.id)}</div><div class="event-dialogue"><span>${f.name}とミソラ</span><h2>${e.name}</h2><p>${result === "win" ? e.reply : e.intro}</p><p class="hint">おすすめ：${outfits.find((x) => x.id === e.outfit).name}。合わせてクリアすると初回おしゃれボーナス20コイン。</p></div></section><section id="school-challenge" class="action-area">${result === "win" ? `<h2>✧ みんなでクリア！</h2><p>初クリアなら80コイン。おすすめの服を着て初めて成功した場合は、おしゃれスターと20コインも自動で受け取れます。受け取り済みの報酬は増えません。</p>${btn("もう一度遊ぶ", "event-" + e.id)}${btn("洋服屋さんに行く", "tab-shop")}` : result === "fail" ? `<h2>大丈夫、もう一度やってみよう！</h2><p>コインも服も減りません。みんなが応援しているよ。</p>${btn("再挑戦する", "event-" + e.id)}` : `<p>準備ができたら始めよう。途中で離れると挑戦の最初から再開します。</p>${btn("イベント開始", "start")}`}</section>`;
 }
 export function schoolAction(action, { state, act, render }) {
   const a = action.slice(7);

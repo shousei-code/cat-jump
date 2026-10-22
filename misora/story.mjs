@@ -1,4 +1,10 @@
-import { freshSchool, schoolReduce, validSchool } from "./school.mjs";
+import { freshPlayer, validPlayer, playerReduce } from "./player.mjs";
+import {
+  freshSchool,
+  schoolReduce,
+  validSchool,
+  normalizeSchool,
+} from "./school.mjs?v=love1";
 export const chapters = [
   {
     title: "桜の下で、はじめまして",
@@ -170,6 +176,7 @@ export const fresh = () => ({
   endings: [],
   sound: false,
   school: freshSchool(),
+  player: freshPlayer(),
 });
 export function ending(s) {
   return s.study > s.friend && s.study > s.brave
@@ -179,6 +186,7 @@ export function ending(s) {
       : "ずっと、放課後の友だち";
 }
 export function reduce(s, a) {
+  if (a.type.startsWith("player-")) return playerReduce(s, a);
   if (a.type.startsWith("school-")) return schoolReduce(s, a);
   const n = structuredClone(s);
   if (a.type === "choose" && s.phase === "talk" && [0, 1].includes(a.index)) {
@@ -207,6 +215,7 @@ export function reduce(s, a) {
       endings: s.endings,
       sound: s.sound,
       school: s.school ?? freshSchool(),
+      player: s.player ?? freshPlayer(),
     };
   } else if (a.type === "sound") n.sound = !n.sound;
   else return s;
@@ -247,8 +256,12 @@ export function parse(raw) {
     (["clear", "ending"].includes(s.phase) && !s.cleared.includes(s.chapter))
   )
     throw Error("セーブデータを読み込めませんでした");
+  if (s.school !== undefined) normalizeSchool(s.school);
   if (s.school !== undefined && !validSchool(s.school))
     throw Error("学園生活のセーブデータが正しくありません");
   s.school ??= freshSchool();
+  if (s.player !== undefined && !validPlayer(s.player))
+    throw Error("自分のデータが正しくありません");
+  s.player ??= freshPlayer();
   return s;
 }

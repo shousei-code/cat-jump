@@ -22,7 +22,7 @@ with sync_playwright() as p:
   click('tab-campus');click('event-sports')
   page.evaluate('async()=>{const i=new Image();i.src="assets/wardrobe.png?v=1";await i.decode();}')
   page.screenshot(path=f'/tmp/misora-sports-{width}.png',full_page=True,animations='disabled')
-  assert page.locator('.event-cast svg g[clip-path]').count()==2
+  assert page.locator('.event-cast > .wardrobe-figure > g[clip-path]').count()==2
   page.clock.install();page.clock.pause_at(1000000000000)
   click('start')
   page.locator('#relay-hit').click()
