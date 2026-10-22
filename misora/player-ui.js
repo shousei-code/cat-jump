@@ -6,14 +6,14 @@ import {
   colors,
   dates,
   freshPlayer,
-} from "./player.mjs?v=ears1";
+} from "./player.mjs?v=uniform1";
 import {
   playerFigure,
   pinIcon,
   shoeIcon,
   escapeHtml as esc,
-} from "./player-art.js?v=ears1";
-import { figure } from "./school-ui.js?v=ears1";
+} from "./player-art.js?v=uniform1";
+import { figure } from "./school-ui.js?v=uniform1";
 let category = "dress",
   dateReply = null;
 const names = { dress: dressNames, pin: pinNames, shoes: shoeNames };
@@ -30,7 +30,7 @@ export function creatorView(state) {
     )
     .join(
       "",
-    )}</nav><div class="player-items">${names[category].map((name, i) => `<button class="player-item ${p[category] === i ? "selected" : ""}" data-action="player-equip-${category}-${i}" aria-pressed="${p[category] === i}">${category === "dress" ? playerFigure({ ...state, player: { ...p, dress: i } }, "preview") : category === "pin" ? pinIcon(i) : shoeIcon(i)}<span>${name}</span>${p[category] === i ? "<small>着用中</small>" : ""}</button>`).join("")}</div><p class="hint">お洋服は14デザイン＋スカートの色違い6点、靴は6デザインの色違いを含みます。髪飾りはピン20点に、カチューシャ・大きなリボン・猫耳6点を追加しました。</p></section></div>`;
+    )}</nav><div class="player-items">${names[category].map((name, i) => `<button class="player-item ${p[category] === i ? "selected" : ""}" data-action="player-equip-${category}-${i}" aria-pressed="${p[category] === i}">${category === "dress" ? playerFigure({ ...state, player: { ...p, dress: i } }, "preview") : category === "pin" ? pinIcon(i) : shoeIcon(i)}<span>${name}</span>${p[category] === i ? "<small>着用中</small>" : ""}</button>`).join("")}</div><p class="hint">お洋服は制服やカーディガンなど学生らしい20コーデ。靴は6デザインの色違いを含みます。髪飾りはピン20点に、カチューシャ・大きなリボン・猫耳6点を追加しました。</p></section></div>`;
 }
 export function romanceView(state) {
   const p = state.player ?? freshPlayer(),
