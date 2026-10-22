@@ -1,3 +1,4 @@
+import { freshSchool, schoolReduce, validSchool } from "./school.mjs";
 export const chapters = [
   {
     title: "桜の下で、はじめまして",
@@ -168,6 +169,7 @@ export const fresh = () => ({
   album: [],
   endings: [],
   sound: false,
+  school: freshSchool(),
 });
 export function ending(s) {
   return s.study > s.friend && s.study > s.brave
@@ -177,6 +179,7 @@ export function ending(s) {
       : "ずっと、放課後の友だち";
 }
 export function reduce(s, a) {
+  if (a.type.startsWith("school-")) return schoolReduce(s, a);
   const n = structuredClone(s);
   if (a.type === "choose" && s.phase === "talk" && [0, 1].includes(a.index)) {
     n.chosen = a.index;
@@ -198,7 +201,13 @@ export function reduce(s, a) {
       n.chosen = null;
     }
   } else if (a.type === "replay" && s.phase === "ending") {
-    return { ...fresh(), album: s.album, endings: s.endings, sound: s.sound };
+    return {
+      ...fresh(),
+      album: s.album,
+      endings: s.endings,
+      sound: s.sound,
+      school: s.school ?? freshSchool(),
+    };
   } else if (a.type === "sound") n.sound = !n.sound;
   else return s;
   return n;
@@ -238,5 +247,8 @@ export function parse(raw) {
     (["clear", "ending"].includes(s.phase) && !s.cleared.includes(s.chapter))
   )
     throw Error("セーブデータを読み込めませんでした");
+  if (s.school !== undefined && !validSchool(s.school))
+    throw Error("学園生活のセーブデータが正しくありません");
+  s.school ??= freshSchool();
   return s;
 }

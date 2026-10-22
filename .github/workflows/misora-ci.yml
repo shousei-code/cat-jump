@@ -14,10 +14,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node --test misora/tests/story.test.mjs
+      - run: node --test misora/tests/*.test.mjs
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: pip install playwright==1.56.0
       - run: python -m playwright install --with-deps chromium
       - run: python misora/tests/browser.py
+      - run: python misora/tests/school-browser.py

@@ -1,4 +1,5 @@
-import { chapters, fresh, reduce, parse, ending } from "./story.mjs";
+import { schoolView, schoolAction, stopSchool } from "./school-ui.js?v=school1";
+import { chapters, fresh, reduce, parse, ending } from "./story.mjs?v=school1";
 const key = "misora-school-v1",
   app = document.querySelector("#app");
 let state = fresh(),
@@ -44,6 +45,7 @@ function act(a) {
   render();
 }
 function stop() {
+  stopSchool();
   session++;
   cancelAnimationFrame(raf);
   clearTimeout(timer);
@@ -74,7 +76,7 @@ function scene(i, extra = "") {
 function render() {
   stop();
   const c = chapters[state.chapter];
-  app.innerHTML = `<header><a href="../">← ゲームひろば</a><button data-action="title" class="brand">Misora <span>AFTER SCHOOL</span></button><button data-action="settings" aria-label="設定">⚙ 設定</button></header><main>${screen === "title" ? `<section class="cover">${scene(0)}<div class="cover-copy"><span class="eyebrow">君となら、放課後はもっと輝く。</span><h1>ミソラと放課後<span>♡ きらめきスクール</span></h1><p>勉強も、ゲームも、文化祭も。<br>小さな「好き」から始まる、ふたりの学園生活。</p><div class="title-actions">${button(saved ? "物語のつづきから" : "ミソラに会いにいく", "play", "primary")}${button("思い出アルバム", "album")}</div><small>全6章＋エンディング · ひとりで遊ぶ友情アドベンチャー</small></div></section><div class="features"><span>✿ 選んで育つ友情</span><span>✧ 4つのチャレンジ</span><span>♡ 3つの結末</span></div>` : screen === "settings" ? settings() : screen === "album" ? album() : `<div class="chapter-head"><div><span class="eyebrow">${c.season}</span><h1>${state.phase === "ending" ? "ふたりの、これから" : c.title}</h1></div><span class="chapter-count">${state.chapter + 1} / 6</span></div><div class="progress">${chapters.map((_, i) => `<i class="${i <= state.chapter ? "on" : ""}"></i>`).join("")}</div><div class="stats"><span>♡ 友情 ${state.friend}</span><span>✧ 勇気 ${state.brave}</span><span>✎ ひらめき ${state.study}</span>${button("アルバム", "album")}</div><section class="story-scene">${scene(c.art)}<span class="location">${c.place}</span><div class="dialogue"><span class="speaker">ミソラ</span><p>${state.phase === "talk" ? c.text : state.phase === "reply" ? c.choices[state.chosen][1] : state.phase === "clear" ? "「やったね！ きみと一緒だから、こんなに楽しいんだ。ありがとう！」" : state.phase === "ending" ? "「これからも、きみの好きなことを教えて。僕も、たくさん話したいな。また明日！」" : "「準備できた？ 大丈夫、何度でも一緒に挑戦しよう！」"}</p></div></section><section class="action-area" aria-live="polite">${state.phase === "talk" ? `<p class="hint">ミソラに、なんて答える？</p><div class="choices">${c.choices.map((x, i) => button(esc(x[0]), "choice-" + i)).join("")}</div>` : state.phase === "reply" ? button("一緒に挑戦する", "challenge", "primary") : state.phase === "challenge" ? `<div id="challenge"><span class="eyebrow">AFTER SCHOOL CHALLENGE</span><h2>${{ quiz: "ことばと知識のチャレンジ", memory: "動きの順番を覚えよう", cafe: "注文を届けよう", timing: "実況のタイミングを決めよう" }[c.kind]}</h2><p>${c.intro}</p><p class="hint">失敗しても何度でも再挑戦できます。途中で離れるとこの挑戦の最初から再開します。</p>${button("チャレンジ開始", "start", "primary")}</div>` : state.phase === "clear" ? `<span class="eyebrow">MEMORY UNLOCKED</span><h2>✧ ふたりでクリア！</h2><p>今日の思い出がアルバムに加わりました。</p>${button(state.chapter === 5 ? "ふたりの結末を見る" : "次の季節へ", "next", "primary")}` : `<span class="eyebrow">OUR ENDING</span><h2>${ending(state)}</h2><p>${ending(state) === "未来のクリエイター" ? "ふたりのアイデアから生まれたゲームが、学園のみんなを笑顔にしました。次の作品も、一緒に。" : ending(state) === "きらめく冒険の相棒" ? "初めてのことに踏み出すたび、隣にはミソラがいました。これからも、ふたりで新しい世界を見つけよう。" : "何気ない放課後が、かけがえのない宝物になりました。好きなものを話せる友だちと、これからも。"}</p><p>最後まで遊んでくれてありがとう。集めた思い出は次の周回でも残ります。</p>${button("思い出を見る", "album")}${button("違う選択でもう一度", "replay", "primary")}`}</section>`}</main><footer><span>${esc(notice)}</span><span>✿ 自分のペースで、楽しもう。</span></footer>`;
+  app.innerHTML = `<header><a href="../">← ゲームひろば</a><button data-action="title" class="brand">Misora <span>AFTER SCHOOL</span></button><button data-action="settings" aria-label="設定">⚙ 設定</button></header><main>${screen === "title" ? `<section class="cover">${scene(0)}<div class="cover-copy"><span class="eyebrow">君となら、放課後はもっと輝く。</span><h1>ミソラと放課後<span>♡ きらめきスクール</span></h1><p>勉強も、ゲームも、文化祭も。<br>小さな「好き」から始まる、ふたりの学園生活。</p><div class="title-actions">${button(saved ? "物語のつづきから" : "ミソラに会いにいく", "play", "primary")}${button("学園生活・着せ替え", "school")}${button("思い出アルバム", "album")}</div><small>全6章＋エンディング · ひとりで遊ぶ友情アドベンチャー</small></div></section><div class="features"><span>✿ 選んで育つ友情</span><span>✧ 4つのチャレンジ</span><span>♡ 3つの結末</span></div>` : screen === "school" ? schoolView(state) : screen === "settings" ? settings() : screen === "album" ? album() : `<div class="chapter-head"><div><span class="eyebrow">${c.season}</span><h1>${state.phase === "ending" ? "ふたりの、これから" : c.title}</h1></div><span class="chapter-count">${state.chapter + 1} / 6</span></div><div class="progress">${chapters.map((_, i) => `<i class="${i <= state.chapter ? "on" : ""}"></i>`).join("")}</div><div class="stats"><span>♡ 友情 ${state.friend}</span><span>✧ 勇気 ${state.brave}</span><span>✎ ひらめき ${state.study}</span>${button("学園生活・着せ替え", "school")}${button("アルバム", "album")}</div><section class="story-scene">${scene(c.art)}<span class="location">${c.place}</span><div class="dialogue"><span class="speaker">ミソラ</span><p>${state.phase === "talk" ? c.text : state.phase === "reply" ? c.choices[state.chosen][1] : state.phase === "clear" ? "「やったね！ きみと一緒だから、こんなに楽しいんだ。ありがとう！」" : state.phase === "ending" ? "「これからも、きみの好きなことを教えて。僕も、たくさん話したいな。また明日！」" : "「準備できた？ 大丈夫、何度でも一緒に挑戦しよう！」"}</p></div></section><section class="action-area" aria-live="polite">${state.phase === "talk" ? `<p class="hint">ミソラに、なんて答える？</p><div class="choices">${c.choices.map((x, i) => button(esc(x[0]), "choice-" + i)).join("")}</div>` : state.phase === "reply" ? button("一緒に挑戦する", "challenge", "primary") : state.phase === "challenge" ? `<div id="challenge"><span class="eyebrow">AFTER SCHOOL CHALLENGE</span><h2>${{ quiz: "ことばと知識のチャレンジ", memory: "動きの順番を覚えよう", cafe: "注文を届けよう", timing: "実況のタイミングを決めよう" }[c.kind]}</h2><p>${c.intro}</p><p class="hint">失敗しても何度でも再挑戦できます。途中で離れるとこの挑戦の最初から再開します。</p>${button("チャレンジ開始", "start", "primary")}</div>` : state.phase === "clear" ? `<span class="eyebrow">MEMORY UNLOCKED</span><h2>✧ ふたりでクリア！</h2><p>今日の思い出がアルバムに加わりました。</p>${button(state.chapter === 5 ? "ふたりの結末を見る" : "次の季節へ", "next", "primary")}` : `<span class="eyebrow">OUR ENDING</span><h2>${ending(state)}</h2><p>${ending(state) === "未来のクリエイター" ? "ふたりのアイデアから生まれたゲームが、学園のみんなを笑顔にしました。次の作品も、一緒に。" : ending(state) === "きらめく冒険の相棒" ? "初めてのことに踏み出すたび、隣にはミソラがいました。これからも、ふたりで新しい世界を見つけよう。" : "何気ない放課後が、かけがえのない宝物になりました。好きなものを話せる友だちと、これからも。"}</p><p>最後まで遊んでくれてありがとう。集めた思い出は次の周回でも残ります。</p>${button("思い出を見る", "album")}${button("違う選択でもう一度", "replay", "primary")}`}</section>`}</main><footer><span>${esc(notice)}</span><span>✿ 自分のペースで、楽しもう。</span></footer>`;
 }
 function album() {
   return `<div class="chapter-head"><div><span class="eyebrow">PRECIOUS MEMORIES</span><h1>ふたりの思い出</h1></div>${button("物語へ戻る", "play")}</div><div class="album-grid">${chapters.map((c, i) => `<article>${state.album.includes(i) ? `${scene(i, "memory-image")}<h2>${c.title}</h2><p>${c.place}</p>` : `<div class="locked">♡</div><h2>まだ見ぬ思い出 ${i + 1}</h2><p>この章をクリアすると開きます。</p>`}</article>`).join("")}</div><h2>結末コレクション ${state.endings.length} / 3</h2>${["ずっと、放課後の友だち", "未来のクリエイター", "きらめく冒険の相棒"].map((e) => `<p>${state.endings.includes(e) ? "✦ " + e : "◇ まだ見ぬ未来"}</p>`).join("")}<p>友情・勇気・ひらめきの選択で結末が変わります。同点なら友情を優先します。</p>`;
@@ -94,6 +96,21 @@ app.addEventListener("click", (e) => {
   const a = e.target.closest("[data-action]")?.dataset.action;
   if (!a) return;
   sound();
+  if (a === "school") {
+    if (blocked) {
+      screen = "settings";
+      render();
+      return;
+    }
+    screen = "school";
+    save();
+    schoolAction("school-tab-campus", { state, act, render });
+    return;
+  }
+  if (a.startsWith("school-")) {
+    schoolAction(a, { state, act, render });
+    return;
+  }
   if (["title", "settings", "album"].includes(a)) {
     screen = a;
     render();
