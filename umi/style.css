@@ -489,3 +489,4 @@ dialog::backdrop {
     font-size: 38px;
   }
 }
+@media (max-width:650px){.hero{min-height:0;padding:310px 24px 24px;background-image:linear-gradient(to bottom,transparent 220px,#fff6fb 330px),url('assets/home.png');background-position:center,65% top;background-size:100% 100%,auto 340px;background-repeat:no-repeat;background-color:#fff6fb}.hero h1{margin-top:10px}}
