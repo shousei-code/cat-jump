@@ -1,0 +1,491 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  color: #654c66;
+  background: #fff8fb;
+  font:
+    15px/1.7 system-ui,
+    "Hiragino Kaku Gothic ProN",
+    sans-serif;
+}
+button,
+a {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  min-height: 46px;
+  padding: 11px 18px;
+  border: 1px solid #e6c7dc;
+  background: #fffafc;
+  color: #735777;
+  border-radius: 16px;
+  touch-action: manipulation;
+  font-weight: 600;
+}
+button:hover {
+  background: #f7e4ef;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #a879bd;
+  outline-offset: 3px;
+}
+a {
+  color: #93748d;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 13px max(18px, calc((100vw - 1100px) / 2));
+  background: #fffdfbee;
+  border-bottom: 1px solid #f0dce8;
+}
+header strong {
+  font-size: 18px;
+}
+header small {
+  display: block;
+  text-align: center;
+  letter-spacing: 0.2em;
+  font-size: 9px;
+  color: #bc96aa;
+}
+header a {
+  font-size: 12px;
+}
+main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 24px;
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.23em;
+  color: #b988a5;
+}
+.hero {
+  border-radius: 28px;
+  min-height: 560px;
+  background:
+    linear-gradient(90deg, #fff4faee, #fff4fa88 40%, transparent 70%),
+    url("assets/home.png") center/cover;
+  display: flex;
+  align-items: center;
+  padding: 40px;
+  border: 1px solid #f0d9e6;
+}
+.hero h1 {
+  font: 700 clamp(30px, 4vw, 46px) / 1.45 serif;
+  color: #73516e;
+  margin: 15px 0;
+}
+.hero p {
+  max-width: 380px;
+}
+.primary {
+  background: #b7739b;
+  color: white;
+  border-color: #b7739b;
+  box-shadow: 0 5px 16px #b7739b24;
+}
+.primary:hover {
+  background: #a8638c;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #9f7f9d;
+}
+.chips span {
+  background: #fffc;
+  border: 1px solid #efd5e4;
+  border-radius: 30px;
+  padding: 5px 12px;
+}
+.scene {
+  position: relative;
+  min-height: 430px;
+  background: url("assets/school.png") center/cover;
+  border-radius: 25px;
+  overflow: hidden;
+  border: 1px solid #ead4e5;
+}
+.scene.home {
+  background-image: url("assets/home.png");
+}
+.dayLabel {
+  display: inline-block;
+  margin: 18px;
+  padding: 6px 16px;
+  background: #fffdf2e8;
+  border-radius: 20px;
+  color: #926c85;
+  font-size: 12px;
+}
+.dialogue {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  border: 1px solid #fffc;
+  background: #fffaf5ed;
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 17px 23px;
+  box-shadow: 0 4px 30px #62456215;
+}
+.dialogue p {
+  margin: 6px 0;
+}
+.dialogue strong {
+  color: #a16390;
+}
+.choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+}
+.choices button {
+  text-align: left;
+  padding: 16px 22px;
+}
+.topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.topline h2 {
+  font-size: 22px;
+  margin: 4px 0;
+}
+.muted {
+  font-size: 12px;
+  color: #a2879f;
+}
+.homeGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 22px;
+}
+.homeGrid .scene {
+  min-height: 420px;
+}
+.cards {
+  display: grid;
+  gap: 12px;
+}
+.card {
+  border: 1px solid #e9d5e4;
+  background: #fffdfb;
+  padding: 18px;
+  border-radius: 20px;
+}
+.card h3 {
+  margin: 0 0 5px;
+  font-size: 17px;
+}
+.card p {
+  margin: 5px 0;
+  font-size: 13px;
+}
+.card button {
+  padding: 8px 14px;
+}
+.skills {
+  display: flex;
+  gap: 9px;
+  margin: 14px 0;
+  flex-wrap: wrap;
+}
+.skills span {
+  border-radius: 15px;
+  padding: 9px 13px;
+  background: #f1e7f6;
+  font-size: 12px;
+}
+.friendGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.heartbar {
+  height: 7px;
+  background: #efdfed;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.heartbar i {
+  display: block;
+  height: 100%;
+  background: #d390b8;
+}
+.gameBox {
+  max-width: 780px;
+  margin: auto;
+  border: 1px solid #e5cde1;
+  border-radius: 24px;
+  background: #fffdfc;
+  padding: 25px;
+  text-align: center;
+  min-height: 440px;
+}
+.gameBox h2 {
+  margin: 0 0 8px;
+}
+.memoryRow {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 25px 0;
+}
+.symbol {
+  font-size: 34px;
+  background: #f6ebf4;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  width: 75px;
+  height: 75px;
+}
+.memoryKeys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 25px 0;
+}
+.memoryKeys button {
+  font-size: 32px;
+  height: 80px;
+}
+.track {
+  position: relative;
+  height: 75px;
+  margin: 35px 0;
+  background: linear-gradient(
+    90deg,
+    #f7e8ef 0 43%,
+    #cee9e2 43% 57%,
+    #f7e8ef 57%
+  );
+  border-radius: 18px;
+  overflow: hidden;
+}
+.track:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  border-left: 2px dashed #69a99a;
+}
+.note {
+  position: absolute;
+  top: 17px;
+  left: 0;
+  font-size: 30px;
+  transform: translateX(-50%);
+  will-change: left;
+}
+.hit {
+  width: 180px;
+  height: 85px;
+  font-size: 22px;
+  background: #b87aa5;
+  color: white;
+}
+.arena {
+  height: 320px;
+  position: relative;
+  background: radial-gradient(ellipse at top, #dcecf4, #f5e1ed);
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+.target {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 2px solid #dfb381;
+  background: #fff5bd;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px #ad819633;
+}
+.score {
+  font-size: 45px;
+  color: #ab709a;
+  margin: 15px 0;
+}
+.resultArt {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  border-radius: 22px;
+}
+.week {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.week span {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #eadbec;
+  text-align: center;
+  line-height: 34px;
+}
+.week .done {
+  background: #d6eee6;
+}
+.week .today {
+  background: #b77ca4;
+  color: white;
+}
+dialog {
+  width: min(620px, 92vw);
+  max-height: 85dvh;
+  border: 1px solid #e4cddd;
+  border-radius: 25px;
+  padding: 26px;
+  background: #fffafc;
+  color: #70516f;
+  box-shadow: 0 20px 80px #5b355c44;
+}
+dialog::backdrop {
+  background: #705d7d66;
+  backdrop-filter: blur(5px);
+}
+#toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 22px;
+  border-radius: 18px;
+  background: #755778;
+  color: white;
+  max-width: 90vw;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+#toast.show {
+  opacity: 1;
+}
+[hidden] {
+  display: none !important;
+}
+@media (max-width: 650px) {
+  header {
+    padding: 9px;
+    gap: 8px;
+  }
+  header strong {
+    font-size: 13px;
+  }
+  header a {
+    font-size: 10px;
+  }
+  header button {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  main {
+    padding: 14px;
+  }
+  .hero {
+    min-height: 590px;
+    align-items: end;
+    padding: 24px;
+    background-image:
+      linear-gradient(0deg, #fff6fb 5%, #fff4fad9 43%, transparent 75%),
+      url("assets/home.png");
+    background-position: 65% center;
+  }
+  .hero h1 {
+    font-size: 32px;
+  }
+  .hero p {
+    font-size: 13px;
+  }
+  .scene {
+    min-height: 470px;
+    background-position: 60% center;
+  }
+  .dialogue {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    padding: 15px;
+    font-size: 14px;
+  }
+  .choices {
+    grid-template-columns: 1fr;
+  }
+  .homeGrid {
+    grid-template-columns: 1fr;
+  }
+  .homeGrid .scene {
+    min-height: 300px;
+  }
+  .friendGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .gameBox {
+    padding: 18px;
+    min-height: 430px;
+  }
+  .memoryKeys {
+    gap: 6px;
+  }
+  .memoryKeys button {
+    height: 65px;
+    font-size: 26px;
+    padding: 4px;
+  }
+  .symbol {
+    width: 55px;
+    height: 55px;
+    font-size: 27px;
+  }
+  .topline {
+    align-items: start;
+  }
+  .topline h2 {
+    font-size: 19px;
+  }
+  .arena {
+    height: 300px;
+  }
+  .card {
+    padding: 15px;
+  }
+  .score {
+    font-size: 38px;
+  }
+}
