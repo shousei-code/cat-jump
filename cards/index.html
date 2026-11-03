@@ -1,0 +1,8 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>4人でカードパーティー</title><link rel="stylesheet" href="style.css">
+<main><header><a href="../">← ゲーム広場</a><button id="rules">あそびかた</button></header>
+<section id="home"><p class="eyebrow">WELCOME TO THE LITTLE CARD CLUB</p><h1>4人で<br>カードパーティー<span>♠ ♥ ♣ ♦</span></h1><p>あなたと、ハル・モモ・ソラ。<br>お気に入りのテーブルで、もうひと勝負！</p><div class="choices">
+<button data-mode="uno"><b>🌈</b><h2>カラーカード</h2><p>同じ色か数字を出そう！<br>ウノ風のかんたんルール</p><strong>このテーブルで遊ぶ →</strong></button>
+<button data-mode="baba"><b>🃏</b><h2>ババ抜き</h2><p>そろえて、ドキドキ。<br>ジョーカーはだれの手に？</p><strong>このテーブルで遊ぶ →</strong></button>
+<button data-mode="recipe"><b>🍓</b><h2>レシピあつめ</h2><p>6つの材料を集めよう！<br>オリジナルのお料理カード</p><strong>このテーブルで遊ぶ →</strong></button></div><small>1人＋コンピューター3人専用。通信・課金なし。対戦途中の保存はありません。</small></section>
+<section id="game" hidden><div class="toolbar"><h2 id="title"></h2><button id="back">テーブルを選ぶ</button></div><div id="players"></div><div class="felt"><p id="status" role="status" aria-live="polite"></p><div id="middle"></div><div id="result"></div></div><h3>あなたの手札 <small>出せるカードをタップ</small></h3><div id="hand"></div><div id="log" aria-live="polite"></div></section>
+<dialog id="dialog"><div id="dialogBody"></div></dialog></main><script type="module" src="app.mjs"></script></html>

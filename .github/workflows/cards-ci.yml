@@ -1,0 +1,16 @@
+name: Card party tests
+on:
+  push:
+    paths: ['cards/**', '.github/workflows/cards-ci.yml']
+  pull_request:
+    paths: ['cards/**', '.github/workflows/cards-ci.yml']
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check cards/app.mjs
+      - run: node cards/core.test.mjs
